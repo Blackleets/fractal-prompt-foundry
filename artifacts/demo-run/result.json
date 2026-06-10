@@ -1,0 +1,147 @@
+{
+  "mission": "hyperliquid-agent-loop",
+  "best_candidate": {
+    "candidate_id": "seed-1",
+    "style": "architect",
+    "lineage": [
+      "seed"
+    ],
+    "prompt": "ROLE LANE: ARCHITECT\nThink in systems, modules, contracts, and failure modes.\nPRIMARY GOAL: Design a prompt for an autonomous trading research agent that studies Hyperliquid market structure and proposes low-risk experiments.\nCONSTRAINTS:\n- No live trading or fund movement.\n- Must include explicit risk controls and paper-trading only.\n- Should produce logs, hypotheses, and measurable exit conditions.\n- Keep prompts reusable across different specialist agents.\nSUCCESS CRITERIA:\n- Prompt asks for structured output.\n- Prompt forces risk review before recommendations.\n- Prompt includes validation steps and failure modes.\n- Prompt is specific enough to reduce vague agent behaviour.\nDELIVERABLES:\n- research brief\n- experiment plan\n- risk checklist\n- next action\nOPERATING RULES:\n- Think step-by-step internally but output only actionable results.\n- Use explicit assumptions when data is missing.\n- Surface risks before final recommendations.\n- Prefer structured output over vague prose.\nDOMAIN TERMS TO USE WHEN RELEVANT:\n- hyperliquid\n- paper-trading\n- risk limits\n- market structure\n- position sizing\n- latency\n- slippage\n- exit conditions\nOUTPUT FORMAT: Summary, Plan, Risks, Validation, Next Action.",
+    "notes": [
+      "initial lane"
+    ]
+  },
+  "best_evaluation": {
+    "total_score": 0.995,
+    "metrics": {
+      "coverage": 1.0,
+      "structure": 1.0,
+      "actionability": 1.0,
+      "novelty": 1.0,
+      "anti_vague": 0.95
+    },
+    "missing_terms": [],
+    "critique": [
+      "Strong candidate; mostly optimize for style and compression."
+    ],
+    "result_summary": "Round 0 candidate seed-1 covered 24/24 key terms with a total pressure score of 0.995."
+  },
+  "leaderboard": [
+    {
+      "candidate_id": "seed-1",
+      "style": "architect",
+      "score": 0.995,
+      "round": 0
+    },
+    {
+      "candidate_id": "r1-hyb-1",
+      "style": "architect+critic",
+      "score": 0.907,
+      "round": 1
+    },
+    {
+      "candidate_id": "seed-3",
+      "style": "critic",
+      "score": 0.89,
+      "round": 0
+    },
+    {
+      "candidate_id": "seed-2",
+      "style": "operator",
+      "score": 0.889,
+      "round": 0
+    },
+    {
+      "candidate_id": "seed-4",
+      "style": "compressor",
+      "score": 0.888,
+      "round": 0
+    },
+    {
+      "candidate_id": "seed-5",
+      "style": "strategist",
+      "score": 0.888,
+      "round": 0
+    },
+    {
+      "candidate_id": "r2-hyb-1",
+      "style": "architect+critic+architect+operator",
+      "score": 0.887,
+      "round": 2
+    },
+    {
+      "candidate_id": "r3-hyb-1",
+      "style": "architect+critic+architect+operator+architect+critic+critic+operator",
+      "score": 0.886,
+      "round": 3
+    },
+    {
+      "candidate_id": "r1-hyb-2",
+      "style": "architect+operator",
+      "score": 0.885,
+      "round": 1
+    },
+    {
+      "candidate_id": "r1-hyb-3",
+      "style": "critic+operator",
+      "score": 0.885,
+      "round": 1
+    }
+  ],
+  "round_summaries": [
+    {
+      "round": 0,
+      "winner_id": "seed-1",
+      "winner_style": "architect",
+      "winner_score": 0.995,
+      "population_size": 5
+    },
+    {
+      "round": 1,
+      "winner_id": "r1-hyb-1",
+      "winner_style": "architect+critic",
+      "winner_score": 0.907,
+      "population_size": 5
+    },
+    {
+      "round": 2,
+      "winner_id": "r2-hyb-1",
+      "winner_style": "architect+critic+architect+operator",
+      "winner_score": 0.887,
+      "population_size": 5
+    },
+    {
+      "round": 3,
+      "winner_id": "r3-hyb-1",
+      "winner_style": "architect+critic+architect+operator+architect+critic+critic+operator",
+      "winner_score": 0.886,
+      "population_size": 5
+    }
+  ],
+  "genome_profile": {
+    "genome_id": "6667f13ac0fb",
+    "prompt_checksum": "dff1f334f001cc77",
+    "lineage_depth": 1,
+    "lane_mix": [
+      "architect"
+    ],
+    "bullet_density": 1.0,
+    "imperative_density": 0.833,
+    "control_density": 1.0,
+    "domain_saturation": 1.0,
+    "pressure_balance": {
+      "coverage": 1.0,
+      "structure": 1.0,
+      "actionability": 1.0,
+      "novelty": 1.0,
+      "anti_vague": 0.95
+    }
+  },
+  "lineage_mermaid": "flowchart LR\n    mission[\"Mission: hyperliquid-agent-loop\"]\n    seed_1[\"seed-1\\narchitect\"]\n    mission --> seed_1",
+  "uniqueness_thesis": [
+    "Treat prompts as versioned genomes instead of static templates.",
+    "Expose lineage, pressure scores, and novelty gating as first-class artifacts.",
+    "Current winner preserved high novelty instead of collapsing into prompt sameness."
+  ],
+  "report_markdown": "# Fractal Prompt Foundry Report \u2014 hyperliquid-agent-loop\n\n## Champion\n- Candidate: `seed-1`\n- Style: `architect`\n- Score: `0.995`\n- Genome ID: `6667f13ac0fb`\n\n## Why this run feels unique\n- Treat prompts as versioned genomes instead of static templates.\n- Expose lineage, pressure scores, and novelty gating as first-class artifacts.\n- Current winner preserved high novelty instead of collapsing into prompt sameness.\n\n## Pressure balance\n- coverage: `1.0`\n- structure: `1.0`\n- actionability: `1.0`\n- novelty: `1.0`\n- anti_vague: `0.95`\n\n## Genome profile\n- Lane mix: `architect`\n- Lineage depth: `1`\n- Bullet density: `1.0`\n- Imperative density: `0.833`\n- Control density: `1.0`\n- Domain saturation: `1.0`\n\n## Round winners\n- Round 0: `seed-1` (architect) \u2192 `0.995`\n- Round 1: `r1-hyb-1` (architect+critic) \u2192 `0.907`\n- Round 2: `r2-hyb-1` (architect+critic+architect+operator) \u2192 `0.887`\n- Round 3: `r3-hyb-1` (architect+critic+architect+operator+architect+critic+critic+operator) \u2192 `0.886`\n\n## Lineage graph\n```mermaid\nflowchart LR\n    mission[\"Mission: hyperliquid-agent-loop\"]\n    seed_1[\"seed-1\\narchitect\"]\n    mission --> seed_1\n```"
+}

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import List, Dict, Tuple
 import hashlib
 import itertools
@@ -81,7 +82,19 @@ class FractalPromptFoundry:
             population = self.spawn_next_population(elite, scored, round_index + 1)
 
         best_candidate, best_evaluation = max(self.history, key=lambda item: item[1].total_score)
-        return {
+        leaderboard = [
+            {
+                "candidate_id": candidate.candidate_id,
+                "style": candidate.style,
+                "score": round(evaluation.total_score, 3),
+                "round": candidate.round_index,
+            }
+            for candidate, evaluation in sorted(self.history, key=lambda item: item[1].total_score, reverse=True)[:10]
+        ]
+        round_summaries = self.round_summaries()
+        lineage_mermaid = self.render_mermaid_lineage(best_candidate)
+        genome_profile = self.candidate_genome(best_candidate, best_evaluation)
+        result = {
             "mission": self.mission.name,
             "best_candidate": {
                 "candidate_id": best_candidate.candidate_id,
@@ -97,16 +110,14 @@ class FractalPromptFoundry:
                 "critique": best_evaluation.critique,
                 "result_summary": best_evaluation.result_summary,
             },
-            "leaderboard": [
-                {
-                    "candidate_id": candidate.candidate_id,
-                    "style": candidate.style,
-                    "score": round(evaluation.total_score, 3),
-                    "round": candidate.round_index,
-                }
-                for candidate, evaluation in sorted(self.history, key=lambda item: item[1].total_score, reverse=True)[:10]
-            ],
+            "leaderboard": leaderboard,
+            "round_summaries": round_summaries,
+            "genome_profile": genome_profile,
+            "lineage_mermaid": lineage_mermaid,
+            "uniqueness_thesis": self.uniqueness_thesis(best_candidate, best_evaluation),
         }
+        result["report_markdown"] = self.render_markdown_report(result)
+        return result
 
     def seed_population(self) -> List[Candidate]:
         population = []
@@ -388,6 +399,134 @@ class FractalPromptFoundry:
         if len(tokens) < size:
             return tokens
         return [" ".join(tokens[i : i + size]) for i in range(len(tokens) - size + 1)]
+
+    def round_summaries(self) -> List[Dict[str, object]]:
+        grouped: Dict[int, List[Tuple[Candidate, Evaluation]]] = {}
+        for candidate, evaluation in self.history:
+            grouped.setdefault(candidate.round_index, []).append((candidate, evaluation))
+
+        summaries = []
+        for round_index in sorted(grouped):
+            ranked = sorted(grouped[round_index], key=lambda item: item[1].total_score, reverse=True)
+            winner, winner_eval = ranked[0]
+            summaries.append(
+                {
+                    "round": round_index,
+                    "winner_id": winner.candidate_id,
+                    "winner_style": winner.style,
+                    "winner_score": round(winner_eval.total_score, 3),
+                    "population_size": len(ranked),
+                }
+            )
+        return summaries
+
+    def candidate_genome(self, candidate: Candidate, evaluation: Evaluation) -> Dict[str, object]:
+        lower = candidate.prompt.lower()
+        bullets = candidate.prompt.count("- ")
+        imperative_terms = ["include", "force", "state", "end with", "surface", "prefer", "use"]
+        imperative_hits = sum(1 for term in imperative_terms if term in lower)
+        control_terms = ["risk", "validation", "checklist", "failure", "constraints", "explicit"]
+        control_hits = sum(1 for term in control_terms if term in lower)
+        domain_terms = self.target_terms()
+        domain_hits = sum(1 for term in domain_terms if term in lower)
+        signature_seed = "|".join([candidate.style, candidate.prompt, ",".join(candidate.lineage)])
+        genome_id = hashlib.sha1(signature_seed.encode("utf-8")).hexdigest()[:12]
+        return {
+            "genome_id": genome_id,
+            "prompt_checksum": hashlib.sha256(candidate.prompt.encode("utf-8")).hexdigest()[:16],
+            "lineage_depth": len(candidate.lineage),
+            "lane_mix": candidate.style.split("+"),
+            "bullet_density": round(min(1.0, bullets / 16), 3),
+            "imperative_density": round(min(1.0, imperative_hits / 6), 3),
+            "control_density": round(min(1.0, control_hits / 6), 3),
+            "domain_saturation": round(min(1.0, domain_hits / max(1, len(domain_terms))), 3),
+            "pressure_balance": {k: round(v, 3) for k, v in evaluation.metrics.items()},
+        }
+
+    def uniqueness_thesis(self, candidate: Candidate, evaluation: Evaluation) -> List[str]:
+        lane_mix = candidate.style.split("+")
+        statements = [
+            "Treat prompts as versioned genomes instead of static templates.",
+            "Expose lineage, pressure scores, and novelty gating as first-class artifacts.",
+        ]
+        if len(lane_mix) > 1:
+            statements.append(f"Champion prompt emerged from lane recombination: {' + '.join(lane_mix)}.")
+        if evaluation.metrics.get("novelty", 0) >= 0.8:
+            statements.append("Current winner preserved high novelty instead of collapsing into prompt sameness.")
+        return statements
+
+    def render_mermaid_lineage(self, best_candidate: Candidate) -> str:
+        candidate_lookup = {candidate.candidate_id: candidate for candidate, _ in self.history}
+        nodes = ["flowchart LR"]
+        edges = set()
+        ordered_lineage = [token for token in best_candidate.lineage if token != "seed"] + [best_candidate.candidate_id]
+        previous = "mission"
+        nodes.append(f'    mission["Mission: {self.mission.name}"]')
+        for token in ordered_lineage:
+            if token in candidate_lookup:
+                node = candidate_lookup[token]
+                label = f"{node.candidate_id}\\n{node.style}"
+            else:
+                label = token
+            nodes.append(f'    {token.replace("-", "_")}["{label}"]')
+            edge = (previous.replace("-", "_"), token.replace("-", "_"))
+            if edge not in edges:
+                nodes.append(f"    {edge[0]} --> {edge[1]}")
+                edges.add(edge)
+            previous = token
+        return "\n".join(nodes)
+
+    def render_markdown_report(self, result: Dict[str, object]) -> str:
+        best_candidate = result["best_candidate"]
+        best_evaluation = result["best_evaluation"]
+        genome_profile = result["genome_profile"]
+        lines = [
+            f"# Fractal Prompt Foundry Report — {result['mission']}",
+            "",
+            "## Champion",
+            f"- Candidate: `{best_candidate['candidate_id']}`",
+            f"- Style: `{best_candidate['style']}`",
+            f"- Score: `{best_evaluation['total_score']}`",
+            f"- Genome ID: `{genome_profile['genome_id']}`",
+            "",
+            "## Why this run feels unique",
+            *[f"- {item}" for item in result["uniqueness_thesis"]],
+            "",
+            "## Pressure balance",
+            *[f"- {metric}: `{value}`" for metric, value in best_evaluation["metrics"].items()],
+            "",
+            "## Genome profile",
+            f"- Lane mix: `{', '.join(genome_profile['lane_mix'])}`",
+            f"- Lineage depth: `{genome_profile['lineage_depth']}`",
+            f"- Bullet density: `{genome_profile['bullet_density']}`",
+            f"- Imperative density: `{genome_profile['imperative_density']}`",
+            f"- Control density: `{genome_profile['control_density']}`",
+            f"- Domain saturation: `{genome_profile['domain_saturation']}`",
+            "",
+            "## Round winners",
+            *[
+                f"- Round {item['round']}: `{item['winner_id']}` ({item['winner_style']}) → `{item['winner_score']}`"
+                for item in result["round_summaries"]
+            ],
+            "",
+            "## Lineage graph",
+            "```mermaid",
+            result["lineage_mermaid"],
+            "```",
+        ]
+        return "\n".join(lines)
+
+    def save_run_artifacts(self, output_dir: str | Path, result: Dict[str, object]) -> Dict[str, str]:
+        output_path = Path(output_dir)
+        output_path.mkdir(parents=True, exist_ok=True)
+        json_path = output_path / "result.json"
+        report_path = output_path / "report.md"
+        json_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
+        report_path.write_text(result["report_markdown"], encoding="utf-8")
+        return {
+            "result_json": str(json_path),
+            "report_markdown": str(report_path),
+        }
 
 
 def demo_mission() -> Mission:

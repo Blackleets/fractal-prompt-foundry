@@ -1,4 +1,6 @@
+import tempfile
 import unittest
+from pathlib import Path
 
 from fractal_prompt_foundry import FractalPromptFoundry, demo_mission
 
@@ -9,6 +11,8 @@ class FoundryTests(unittest.TestCase):
         result = engine.run(rounds=3)
         self.assertIn("best_candidate", result)
         self.assertIn("best_evaluation", result)
+        self.assertIn("genome_profile", result)
+        self.assertIn("lineage_mermaid", result)
         self.assertGreater(result["best_evaluation"]["total_score"], 0.5)
         self.assertTrue(result["leaderboard"])
 
@@ -19,6 +23,14 @@ class FoundryTests(unittest.TestCase):
         self.assertIn("primary goal", prompt)
         self.assertIn("constraints", prompt)
         self.assertIn("hyperliquid", prompt)
+
+    def test_artifacts_are_written(self):
+        engine = FractalPromptFoundry(demo_mission())
+        result = engine.run(rounds=2)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            artifacts = engine.save_run_artifacts(tmpdir, result)
+            self.assertTrue(Path(artifacts["result_json"]).exists())
+            self.assertTrue(Path(artifacts["report_markdown"]).exists())
 
 
 if __name__ == "__main__":

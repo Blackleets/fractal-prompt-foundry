@@ -59,6 +59,15 @@ Instead of retrying one weak prompt over and over, this project:
 ### Prompt DNA
 Prompts are treated like composable structures, not raw strings.
 
+### Prompt genome profiling
+Every winning prompt now gets a **genome profile** with:
+- genome ID
+- lineage depth
+- lane mix
+- control density
+- domain saturation
+- pressure balance snapshot
+
 ### Mutation lanes
 Different lanes push different prompt personalities:
 - architect
@@ -72,6 +81,12 @@ Top candidates can merge into stronger prompt lineages instead of relying on sin
 
 ### Novelty gate
 Near-duplicate prompts get rejected so the loop stays exploratory instead of collapsing into sameness.
+
+### Lineage artifacts
+Each run can emit:
+- `result.json`
+- `report.md`
+- a Mermaid lineage graph of how the champion evolved
 
 ### Pressure score
 Each candidate is scored on:

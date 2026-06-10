@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fractal-prompt-foundry"
+version = "0.1.0"
+description = "A prompt-evolution engine for breeding better instructions before they ever hit your agents."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+  { name = "LEE | Vytronix" }
+]
+keywords = [
+  "prompt-engineering",
+  "agents",
+  "multi-agent",
+  "llm",
+  "prompt-optimization",
+  "orchestration"
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/Blackleets/fractal-prompt-foundry"
+Repository = "https://github.com/Blackleets/fractal-prompt-foundry"
+Issues = "https://github.com/Blackleets/fractal-prompt-foundry/issues"
+
+[tool.setuptools]
+py-modules = ["fractal_prompt_foundry"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

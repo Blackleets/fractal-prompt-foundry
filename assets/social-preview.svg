@@ -1,0 +1,64 @@
+<svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="94" y1="72" x2="1186" y2="562" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#030712"/>
+      <stop offset="0.5" stop-color="#111827"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="line" x1="196" y1="155" x2="1038" y2="467" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B5CF6"/>
+      <stop offset="0.45" stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="shadow" x="60" y="46" width="1160" height="548" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="20" stdDeviation="35" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="640" fill="#020617"/>
+  <g filter="url(#shadow)">
+    <rect x="92" y="74" width="1096" height="492" rx="34" fill="url(#bg)" stroke="#1E293B"/>
+  </g>
+
+  <text x="160" y="170" fill="#A5B4FC" font-size="18" font-family="Inter,Segoe UI,Arial,sans-serif">Prompt-evolution engine</text>
+  <text x="160" y="230" fill="#F8FAFC" font-size="54" font-weight="700" font-family="Inter,Segoe UI,Arial,sans-serif">Fractal Prompt</text>
+  <text x="160" y="286" fill="#F8FAFC" font-size="54" font-weight="700" font-family="Inter,Segoe UI,Arial,sans-serif">Foundry</text>
+  <text x="160" y="334" fill="#CBD5E1" font-size="23" font-family="Inter,Segoe UI,Arial,sans-serif">Breed better instructions before they ever hit your agents.</text>
+
+  <rect x="160" y="344" width="184" height="44" rx="22" fill="#111827" stroke="#334155"/>
+  <text x="252" y="371" fill="#E2E8F0" font-size="16" font-family="Inter,Segoe UI,Arial,sans-serif" text-anchor="middle">Prompt DNA</text>
+  <rect x="360" y="344" width="184" height="44" rx="22" fill="#111827" stroke="#334155"/>
+  <text x="452" y="371" fill="#E2E8F0" font-size="16" font-family="Inter,Segoe UI,Arial,sans-serif" text-anchor="middle">Hybridization</text>
+  <rect x="560" y="344" width="184" height="44" rx="22" fill="#111827" stroke="#334155"/>
+  <text x="652" y="371" fill="#E2E8F0" font-size="16" font-family="Inter,Segoe UI,Arial,sans-serif" text-anchor="middle">Novelty Gate</text>
+
+  <g opacity="0.96">
+    <rect x="782" y="160" width="160" height="70" rx="18" fill="#0F172A" stroke="#4C1D95"/>
+    <text x="862" y="190" fill="#C4B5FD" font-size="16" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Seed Candidate</text>
+    <text x="862" y="214" fill="#E2E8F0" font-size="14" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">architect lane</text>
+
+    <rect x="990" y="160" width="160" height="70" rx="18" fill="#0F172A" stroke="#0EA5E9"/>
+    <text x="1070" y="190" fill="#67E8F9" font-size="16" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Score Pressure</text>
+    <text x="1070" y="214" fill="#E2E8F0" font-size="14" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">coverage + actionability</text>
+
+    <rect x="782" y="275" width="160" height="70" rx="18" fill="#0F172A" stroke="#F59E0B"/>
+    <text x="862" y="305" fill="#FCD34D" font-size="16" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Hybrid Winner</text>
+    <text x="862" y="329" fill="#E2E8F0" font-size="14" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">architect + critic</text>
+
+    <rect x="990" y="275" width="160" height="70" rx="18" fill="#0F172A" stroke="#14B8A6"/>
+    <text x="1070" y="305" fill="#5EEAD4" font-size="16" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Novelty Gate</text>
+    <text x="1070" y="329" fill="#E2E8F0" font-size="14" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">reject duplicates</text>
+
+    <rect x="840" y="392" width="258" height="64" rx="20" fill="#0B1322" stroke="url(#line)"/>
+    <text x="969" y="420" fill="#F8FAFC" font-size="18" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Best Prompt DNA</text>
+    <text x="969" y="441" fill="#CBD5E1" font-size="13" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">ready for specialist agents</text>
+
+    <path d="M942 195H990" stroke="url(#line)" stroke-width="3" stroke-dasharray="8 8"/>
+    <path d="M1070 230V275" stroke="url(#line)" stroke-width="3" stroke-dasharray="8 8"/>
+    <path d="M942 310H990" stroke="url(#line)" stroke-width="3" stroke-dasharray="8 8"/>
+    <path d="M969 345V392" stroke="url(#line)" stroke-width="3" stroke-dasharray="8 8"/>
+  </g>
+
+  <text x="160" y="450" fill="#94A3B8" font-size="19" font-family="Inter,Segoe UI,Arial,sans-serif">For coding, research, trading, and orchestration agents.</text>
+  <text x="160" y="490" fill="#64748B" font-size="15" font-family="Inter,Segoe UI,Arial,sans-serif">A distinctive open-source concept with room for demos, APIs, tournaments, and hosted prompt evolution.</text>
+</svg>

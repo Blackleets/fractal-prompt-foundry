@@ -1,0 +1,90 @@
+<svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#050816"/>
+      <stop offset="0.5" stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="241" y1="146" x2="1068" y2="492" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B5CF6"/>
+      <stop offset="0.5" stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    <radialGradient id="glowL" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(230 180) rotate(23.8) scale(362.018 285.271)">
+      <stop stop-color="#7C3AED" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowR" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1030 470) rotate(180) scale(352 240)">
+      <stop stop-color="#06B6D4" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#06B6D4" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur" x="-80" y="-80" width="1440" height="800" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+    <filter id="softShadow" x="0" y="0" width="1280" height="640" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="16" stdDeviation="30" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="640" rx="28" fill="url(#bg)"/>
+  <g filter="url(#blur)">
+    <ellipse cx="240" cy="190" rx="250" ry="150" fill="url(#glowL)"/>
+    <ellipse cx="1025" cy="450" rx="260" ry="140" fill="url(#glowR)"/>
+  </g>
+
+  <g opacity="0.25">
+    <path d="M90 530C192 452 307 431 402 448C497 465 571 515 668 521C767 527 860 476 962 420C1064 364 1135 338 1200 340" stroke="#334155" stroke-width="2" stroke-dasharray="8 12"/>
+    <path d="M132 122C226 160 300 223 387 248C474 273 580 260 680 237C782 213 882 181 960 193C1036 204 1098 258 1168 328" stroke="#1E293B" stroke-width="2" stroke-dasharray="8 12"/>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="720" y="132" width="422" height="356" rx="24" fill="#071122" fill-opacity="0.86" stroke="#334155"/>
+    <rect x="748" y="168" width="144" height="26" rx="13" fill="#111827" stroke="#475569"/>
+    <text x="820" y="186" fill="#CBD5E1" font-size="14" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Prompt DNA</text>
+
+    <rect x="754" y="224" width="166" height="62" rx="16" fill="#101827" stroke="#4C1D95"/>
+    <text x="837" y="247" fill="#A78BFA" font-size="14" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Seed Lanes</text>
+    <text x="837" y="269" fill="#E2E8F0" font-size="13" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">architect · operator · critic</text>
+
+    <rect x="949" y="224" width="166" height="62" rx="16" fill="#101827" stroke="#0EA5E9"/>
+    <text x="1032" y="247" fill="#67E8F9" font-size="14" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Pressure Score</text>
+    <text x="1032" y="269" fill="#E2E8F0" font-size="13" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">coverage · structure · actionability</text>
+
+    <rect x="754" y="316" width="166" height="62" rx="16" fill="#101827" stroke="#F59E0B"/>
+    <text x="837" y="339" fill="#FCD34D" font-size="14" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Hybridization</text>
+    <text x="837" y="361" fill="#E2E8F0" font-size="13" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">merge strong prompt genes</text>
+
+    <rect x="949" y="316" width="166" height="62" rx="16" fill="#101827" stroke="#14B8A6"/>
+    <text x="1032" y="339" fill="#5EEAD4" font-size="14" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Novelty Gate</text>
+    <text x="1032" y="361" fill="#E2E8F0" font-size="13" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">reject near-duplicates</text>
+
+    <rect x="754" y="408" width="361" height="46" rx="16" fill="#0B1322" stroke="url(#accent)"/>
+    <text x="934.5" y="437" fill="#F8FAFC" font-size="16" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Best Prompt Emerges → specialist agents execute later</text>
+
+    <path d="M920 255H948" stroke="#475569" stroke-width="2" stroke-dasharray="6 8"/>
+    <path d="M920 347H948" stroke="#475569" stroke-width="2" stroke-dasharray="6 8"/>
+    <path d="M837 286V316" stroke="#475569" stroke-width="2" stroke-dasharray="6 8"/>
+    <path d="M1032 286V316" stroke="#475569" stroke-width="2" stroke-dasharray="6 8"/>
+  </g>
+
+  <rect x="86" y="104" width="127" height="34" rx="17" fill="#0F172A" stroke="#334155"/>
+  <circle cx="109" cy="121" r="5" fill="#8B5CF6"/>
+  <circle cx="126" cy="121" r="5" fill="#22D3EE"/>
+  <circle cx="143" cy="121" r="5" fill="#F59E0B"/>
+  <text x="232" y="128" fill="#94A3B8" font-size="14" font-family="Inter,Segoe UI,Arial,sans-serif">Prompt evolution engine</text>
+
+  <text x="86" y="215" fill="#F8FAFC" font-size="66" font-weight="700" font-family="Inter,Segoe UI,Arial,sans-serif">Fractal Prompt</text>
+  <text x="86" y="287" fill="url(#accent)" font-size="66" font-weight="700" font-family="Inter,Segoe UI,Arial,sans-serif">Foundry</text>
+
+  <text x="86" y="342" fill="#CBD5E1" font-size="24" font-family="Inter,Segoe UI,Arial,sans-serif">Breed better instructions before they ever hit your agents.</text>
+  <text x="86" y="380" fill="#94A3B8" font-size="18" font-family="Inter,Segoe UI,Arial,sans-serif">Seed prompt lanes → score pressure → hybridize winners.</text>
+  <text x="86" y="410" fill="#94A3B8" font-size="18" font-family="Inter,Segoe UI,Arial,sans-serif">Mutate gaps, reject duplicates, keep the strongest DNA.</text>
+
+  <rect x="86" y="436" width="214" height="52" rx="26" fill="url(#accent)"/>
+  <text x="193" y="468" fill="#020617" font-size="18" font-weight="700" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Evolve prompts</text>
+
+  <rect x="317" y="436" width="178" height="52" rx="26" fill="#0B1220" stroke="#334155"/>
+  <text x="406" y="468" fill="#E2E8F0" font-size="18" font-weight="600" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Run the demo</text>
+
+  <text x="86" y="542" fill="#64748B" font-size="15" font-family="Inter,Segoe UI,Arial,sans-serif">Designed for multi-agent systems, research agents, coding agents, and autonomous orchestration loops.</text>
+</svg>

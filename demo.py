@@ -2,13 +2,16 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from fractal_prompt_foundry import FractalPromptFoundry, demo_mission
+from fractal_prompt_foundry import demo_mission, run_mission
 
 
 def main() -> None:
-    engine = FractalPromptFoundry(demo_mission())
-    result = engine.run(rounds=4)
-    artifacts = engine.save_run_artifacts(Path("artifacts") / "demo-run", result)
+    _, result, artifacts = run_mission(
+        demo_mission(),
+        rounds=4,
+        population_size=5,
+        output_dir=Path("artifacts") / "demo-run",
+    )
 
     print("=== FRACTAL PROMPT FOUNDRY DEMO ===")
     print(f"Mission: {result['mission']}")

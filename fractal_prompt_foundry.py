@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import argparse
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import Any, List, Dict, Tuple
 import hashlib
 import itertools
 import json
@@ -18,6 +19,26 @@ class Mission:
     success_criteria: List[str]
     deliverables: List[str]
     domain_terms: List[str] = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "Mission":
+        required = ["name", "goal", "constraints", "success_criteria", "deliverables"]
+        missing = [key for key in required if key not in data]
+        if missing:
+            raise ValueError(f"Mission data is missing required fields: {', '.join(missing)}")
+        return cls(
+            name=str(data["name"]),
+            goal=str(data["goal"]),
+            constraints=[str(item) for item in data["constraints"]],
+            success_criteria=[str(item) for item in data["success_criteria"]],
+            deliverables=[str(item) for item in data["deliverables"]],
+            domain_terms=[str(item) for item in data.get("domain_terms", [])],
+        )
+
+    @classmethod
+    def from_json_file(cls, path: str | Path) -> "Mission":
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        return cls.from_dict(payload)
 
 
 @dataclass
@@ -569,6 +590,65 @@ def run_demo(rounds: int = 3) -> Dict[str, object]:
     return engine.run(rounds=rounds)
 
 
+def run_mission(
+    mission: Mission,
+    rounds: int = 3,
+    population_size: int = 5,
+    output_dir: str | Path | None = None,
+) -> tuple[FractalPromptFoundry, Dict[str, object], Dict[str, str]]:
+    engine = FractalPromptFoundry(mission, population_size=population_size)
+    result = engine.run(rounds=rounds)
+    artifacts: Dict[str, str] = {}
+    if output_dir is not None:
+        artifacts = engine.save_run_artifacts(output_dir, result)
+    return engine, result, artifacts
+
+
+def build_arg_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="fractal-foundry",
+        description="Evolve prompt candidates into a strongest prompt DNA artifact.",
+    )
+    parser.add_argument("--mission-file", type=Path, help="Path to a JSON mission definition.")
+    parser.add_argument("--rounds", type=int, default=4, help="Number of evolution rounds to run.")
+    parser.add_argument("--population-size", type=int, default=5, help="Number of candidates per round.")
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=Path("artifacts") / "demo-run",
+        help="Directory where result.json and report.md will be written.",
+    )
+    parser.add_argument(
+        "--print-report",
+        action="store_true",
+        help="Print the markdown report instead of the JSON result.",
+    )
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_arg_parser()
+    args = parser.parse_args(argv)
+
+    mission = Mission.from_json_file(args.mission_file) if args.mission_file else demo_mission()
+    _, result, artifacts = run_mission(
+        mission,
+        rounds=args.rounds,
+        population_size=args.population_size,
+        output_dir=args.output_dir,
+    )
+
+    if args.print_report:
+        print(result["report_markdown"])
+    else:
+        print(json.dumps(result, indent=2))
+
+    if artifacts:
+        print("\nArtifacts:", file=None)
+        for name, path in artifacts.items():
+            print(f"- {name}: {path}")
+    return 0
+
+
 if __name__ == "__main__":
-    result = run_demo(rounds=3)
-    print(json.dumps(result, indent=2))
+    raise SystemExit(main())

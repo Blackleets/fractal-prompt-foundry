@@ -8,14 +8,14 @@
   *A prompt-evolution engine that seeds prompt lanes, scores pressure, hybridizes winners, mutates weak spots, and keeps the strongest prompt DNA.*
 
   <p>
-    <a href="#demo">
-      <img src="https://img.shields.io/badge/View-Demo-8B5CF6?style=for-the-badge&logo=vercel&logoColor=white" alt="View Demo" />
+    <a href="#30-second-try">
+      <img src="https://img.shields.io/badge/Try-30_Seconds-8B5CF6?style=for-the-badge&logo=lightning&logoColor=white" alt="Try in 30 seconds" />
     </a>
     <a href="#quickstart">
       <img src="https://img.shields.io/badge/Get-Started-0F172A?style=for-the-badge&logo=python&logoColor=white" alt="Get Started" />
     </a>
-    <a href="#why-it-stands-out">
-      <img src="https://img.shields.io/badge/Why-It's_Different-06B6D4?style=for-the-badge&logo=sparkles&logoColor=white" alt="Why it's different" />
+    <a href="#why-people-would-actually-use-this">
+      <img src="https://img.shields.io/badge/Why-People_Care-06B6D4?style=for-the-badge&logo=sparkles&logoColor=white" alt="Why people care" />
     </a>
   </p>
 
@@ -30,7 +30,7 @@
 
 ---
 
-## Why this exists
+## What this is
 
 Most agent systems stop at one of these patterns:
 
@@ -54,22 +54,99 @@ Instead of retrying one weak prompt over and over, this project:
 
 ---
 
+## Why people would actually use this
+
+This repo becomes interesting when you care about **instruction quality before expensive agent execution**.
+
+### 1. It gives a system-level answer to weak prompts
+Instead of manually editing one prompt, it explores a **small evolutionary search space**.
+
+### 2. It produces inspectable artifacts, not hand-wavy claims
+A run can emit:
+
+- `result.json`
+- `report.md`
+- `lineage_mermaid`
+- `genome_profile`
+- `round_summaries`
+- `uniqueness_thesis`
+
+That makes the concept easier to test, share, and extend.
+
+### 3. It is a useful prototype for bigger agent products
+You can imagine this sitting before:
+
+- coding agents
+- research agents
+- trading research loops
+- evaluation pipelines
+- orchestration layers
+- prompt QA / benchmarking systems
+
+### 4. It is easy to try
+No API key, no hosted dependency, no external model call required for the current prototype.
+
+---
+
+## 30-second try
+
+### Option A — run the demo
+
+```bash
+python demo.py
+```
+
+### Option B — use the built-in CLI entry
+
+```bash
+python -m fractal_prompt_foundry --rounds 4 --print-report
+```
+
+### Option C — run a custom mission JSON
+
+```bash
+python -m fractal_prompt_foundry \
+  --mission-file examples/hyperliquid-mission.json \
+  --rounds 4 \
+  --output-dir artifacts/custom-run
+```
+
+Artifacts are written to:
+
+- `artifacts/demo-run/result.json`
+- `artifacts/demo-run/report.md`
+
+---
+
+## Architecture snapshot
+
+<div align="center">
+  <img src="assets/architecture.svg" alt="Fractal Prompt Foundry architecture snapshot" width="100%" />
+</div>
+
+---
+
 ## Why it stands out
 
 ### Prompt DNA
 Prompts are treated like composable structures, not raw strings.
 
 ### Prompt genome profiling
-Every winning prompt now gets a **genome profile** with:
+Every winning prompt gets a **genome profile** with:
+
 - genome ID
+- prompt checksum
 - lineage depth
 - lane mix
+- bullet density
+- imperative density
 - control density
 - domain saturation
 - pressure balance snapshot
 
 ### Mutation lanes
 Different lanes push different prompt personalities:
+
 - architect
 - operator
 - critic
@@ -82,19 +159,14 @@ Top candidates can merge into stronger prompt lineages instead of relying on sin
 ### Novelty gate
 Near-duplicate prompts get rejected so the loop stays exploratory instead of collapsing into sameness.
 
-### Lineage artifacts
+### Product-level artifacts
 Each run can emit:
+
 - `result.json`
 - `report.md`
 - a Mermaid lineage graph of how the champion evolved
-
-### Pressure score
-Each candidate is scored on:
-- coverage
-- structure
-- actionability
-- novelty
-- anti-vagueness
+- round winners by generation
+- a uniqueness thesis that explains why the run matters
 
 ---
 
@@ -140,6 +212,7 @@ The prototype was executed successfully and produced this real result:
 - **Best candidate:** `seed-1`
 - **Best style:** `architect`
 - **Best score:** `0.995`
+- **Genome ID:** `6667f13ac0fb`
 
 Top leaderboard snapshot:
 
@@ -165,9 +238,11 @@ Metric snapshot:
 
 ## Quickstart
 
-### Run the demo
+### Clone and run
 
 ```bash
+git clone https://github.com/Blackleets/fractal-prompt-foundry.git
+cd fractal-prompt-foundry
 python demo.py
 ```
 
@@ -177,18 +252,68 @@ python demo.py
 python test_foundry.py
 ```
 
+### Use the packaged CLI locally
+
+```bash
+pip install -e .
+fractal-foundry --mission-file examples/hyperliquid-mission.json --rounds 4 --print-report
+```
+
+---
+
+## Example mission schema
+
+```json
+{
+  "name": "mission-name",
+  "goal": "What the target agent should achieve.",
+  "constraints": ["Hard constraints go here."],
+  "success_criteria": ["How the prompt should behave."],
+  "deliverables": ["What the downstream agent must return."],
+  "domain_terms": ["Optional vocabulary that should appear when relevant."]
+}
+```
+
+See:
+
+- `examples/hyperliquid-mission.json`
+
+---
+
+## Contributing
+
+If you want to improve the project or submit ideas, start here:
+
+- `CONTRIBUTING.md`
+
+The easiest valuable contributions right now are:
+
+- new mission examples
+- scoring improvements
+- better lineage / artifact visualization
+- benchmark scenarios for real agent workflows
+
 ---
 
 ## Project structure
 
 ```text
 fractal-prompt-foundry/
+├── artifacts/
+│   └── demo-run/
+│       ├── report.md
+│       └── result.json
 ├── assets/
+│   ├── architecture.svg
 │   ├── hero.svg
 │   └── social-preview.svg
+├── CONTRIBUTING.md
+├── examples/
+│   └── hyperliquid-mission.json
 ├── fractal_prompt_foundry.py
 ├── demo.py
 ├── test_foundry.py
+├── pyproject.toml
 └── README.md
 ```
 
@@ -203,19 +328,25 @@ fractal-prompt-foundry/
 - mutation rounds
 - novelty gating
 - leaderboard output
+- genome profiling
+- lineage reporting
+- JSON + markdown artifacts
+- runnable CLI path
 - runnable demo
 - basic tests
 
 ---
 
-## What comes next
+## What would make people want it even more
+
+If you want the repo to become more desirable to developers, the highest-leverage next upgrades are:
 
 ### Near-term upgrades
 - swap the deterministic evaluator for real agent calls
-- save lineage and generation history to disk
-- diff prompt generations visually
-- add JSON schema validation for missions and evaluations
-- expose the engine as a CLI package
+- add side-by-side prompt diffs between generations
+- include benchmark missions across coding / research / trading
+- add JSON schema validation for mission files
+- export SVG lineage graphs directly, not just Mermaid
 
 ### Bigger upgrades
 - Hermes integration with `delegate_task`
@@ -236,19 +367,6 @@ This concept fits especially well for:
 - agentic evaluation systems
 - team-wide prompt optimization
 - orchestration layers above existing LLM tools
-
----
-
-## Example future integration
-
-```text
-Goal Parser
-  → Prompt Composer
-  → Specialist Agent
-  → Critic Agent
-  → Fractal Prompt Foundry mutation round
-  → Specialist Agent retry
-```
 
 ---
 

@@ -1,0 +1,32 @@
+{
+  "name": "hyperliquid-agent-loop",
+  "goal": "Design a prompt for an autonomous trading research agent that studies Hyperliquid market structure and proposes low-risk experiments.",
+  "constraints": [
+    "No live trading or fund movement.",
+    "Must include explicit risk controls and paper-trading only.",
+    "Should produce logs, hypotheses, and measurable exit conditions.",
+    "Keep prompts reusable across different specialist agents."
+  ],
+  "success_criteria": [
+    "Prompt asks for structured output.",
+    "Prompt forces risk review before recommendations.",
+    "Prompt includes validation steps and failure modes.",
+    "Prompt is specific enough to reduce vague agent behaviour."
+  ],
+  "deliverables": [
+    "research brief",
+    "experiment plan",
+    "risk checklist",
+    "next action"
+  ],
+  "domain_terms": [
+    "hyperliquid",
+    "paper-trading",
+    "risk limits",
+    "market structure",
+    "position sizing",
+    "latency",
+    "slippage",
+    "exit conditions"
+  ]
+}

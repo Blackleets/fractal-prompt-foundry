@@ -1,0 +1,69 @@
+<svg width="1280" height="820" viewBox="0 0 1280 820" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="820" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#030712"/>
+      <stop offset="0.45" stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="184" y1="132" x2="1098" y2="672" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B5CF6"/>
+      <stop offset="0.45" stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="shadow" x="40" y="40" width="1200" height="740" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="22" stdDeviation="30" flood-color="#000" flood-opacity="0.42"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="820" rx="32" fill="url(#bg)"/>
+  <g opacity="0.18">
+    <path d="M120 712C230 620 342 578 436 586C530 594 624 650 722 644C834 637 930 550 1036 472C1104 423 1152 394 1192 384" stroke="#334155" stroke-width="2" stroke-dasharray="10 12"/>
+    <path d="M114 152C224 182 330 246 436 260C560 277 680 230 786 204C910 174 1030 192 1166 290" stroke="#1E293B" stroke-width="2" stroke-dasharray="10 12"/>
+  </g>
+
+  <text x="92" y="110" fill="#A5B4FC" font-size="18" font-family="Inter,Segoe UI,Arial,sans-serif">Fractal Prompt Foundry • architecture snapshot</text>
+  <text x="92" y="172" fill="#F8FAFC" font-size="52" font-weight="700" font-family="Inter,Segoe UI,Arial,sans-serif">From mission brief</text>
+  <text x="92" y="232" fill="#F8FAFC" font-size="52" font-weight="700" font-family="Inter,Segoe UI,Arial,sans-serif">to champion prompt DNA</text>
+  <text x="92" y="286" fill="#94A3B8" font-size="22" font-family="Inter,Segoe UI,Arial,sans-serif">A deterministic prototype that makes prompt evolution legible, testable, and shareable.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="92" y="340" width="240" height="130" rx="24" fill="#0B1220" stroke="#334155"/>
+    <text x="212" y="384" fill="#E2E8F0" font-size="22" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Mission</text>
+    <text x="212" y="416" fill="#A5B4FC" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">goal • constraints</text>
+    <text x="212" y="440" fill="#A5B4FC" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">success criteria • deliverables</text>
+
+    <rect x="382" y="340" width="250" height="130" rx="24" fill="#0B1220" stroke="#4C1D95"/>
+    <text x="507" y="384" fill="#E9D5FF" font-size="22" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Seed lanes</text>
+    <text x="507" y="416" fill="#C4B5FD" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">architect • operator • critic</text>
+    <text x="507" y="440" fill="#C4B5FD" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">compressor • strategist</text>
+
+    <rect x="682" y="340" width="250" height="130" rx="24" fill="#0B1220" stroke="#0EA5E9"/>
+    <text x="807" y="384" fill="#BAE6FD" font-size="22" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Pressure scoring</text>
+    <text x="807" y="416" fill="#67E8F9" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">coverage • structure</text>
+    <text x="807" y="440" fill="#67E8F9" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">actionability • novelty • anti-vague</text>
+
+    <rect x="982" y="340" width="206" height="130" rx="24" fill="#0B1220" stroke="#14B8A6"/>
+    <text x="1085" y="384" fill="#99F6E4" font-size="22" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Champion</text>
+    <text x="1085" y="416" fill="#5EEAD4" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">best prompt DNA</text>
+    <text x="1085" y="440" fill="#5EEAD4" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">ready for downstream agents</text>
+
+    <rect x="250" y="570" width="320" height="126" rx="24" fill="#0B1220" stroke="#F59E0B"/>
+    <text x="410" y="614" fill="#FDE68A" font-size="22" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Mutation + hybridization</text>
+    <text x="410" y="646" fill="#FCD34D" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">merge winning traits</text>
+    <text x="410" y="670" fill="#FCD34D" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">patch missing concepts and validation pressure</text>
+
+    <rect x="642" y="570" width="390" height="126" rx="24" fill="#0B1220" stroke="url(#accent)"/>
+    <text x="837" y="614" fill="#F8FAFC" font-size="22" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">Artifacts that prove the thesis</text>
+    <text x="837" y="646" fill="#CBD5E1" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">result.json • report.md • lineage_mermaid</text>
+    <text x="837" y="670" fill="#CBD5E1" font-size="15" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">genome profile • round winners • uniqueness thesis</text>
+  </g>
+
+  <path d="M332 405H382" stroke="url(#accent)" stroke-width="3" stroke-dasharray="8 8"/>
+  <path d="M632 405H682" stroke="url(#accent)" stroke-width="3" stroke-dasharray="8 8"/>
+  <path d="M932 405H982" stroke="url(#accent)" stroke-width="3" stroke-dasharray="8 8"/>
+  <path d="M807 470V532H410V570" stroke="url(#accent)" stroke-width="3" stroke-dasharray="8 8"/>
+  <path d="M1085 470V532H837V570" stroke="url(#accent)" stroke-width="3" stroke-dasharray="8 8"/>
+
+  <rect x="92" y="726" width="408" height="42" rx="21" fill="#0B1220" stroke="#334155"/>
+  <text x="296" y="752" fill="#E2E8F0" font-size="16" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif">What makes it attractive: clear concept + runnable artifacts + easy demo path</text>
+</svg>

@@ -37,6 +37,9 @@ Homepage = "https://github.com/Blackleets/fractal-prompt-foundry"
 Repository = "https://github.com/Blackleets/fractal-prompt-foundry"
 Issues = "https://github.com/Blackleets/fractal-prompt-foundry/issues"
 
+[project.scripts]
+fractal-foundry = "fractal_prompt_foundry:main"
+
 [tool.setuptools]
 py-modules = ["fractal_prompt_foundry"]
 

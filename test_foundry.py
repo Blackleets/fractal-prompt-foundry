@@ -1,3 +1,6 @@
+import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -57,6 +60,141 @@ class FoundryTests(unittest.TestCase):
             self.assertIn("report_markdown", result)
             self.assertTrue(Path(artifacts["result_json"]).exists())
             self.assertTrue(Path(artifacts["report_markdown"]).exists())
+
+    def test_mission_rejects_string_constraints(self):
+        with self.assertRaises(ValueError):
+            Mission.from_dict(
+                {
+                    "name": "broken-mission",
+                    "goal": "Design a prompt.",
+                    "constraints": "No live trading.",
+                    "success_criteria": ["Structured output."],
+                    "deliverables": ["plan"],
+                }
+            )
+
+    def test_mission_rejects_string_success_criteria(self):
+        with self.assertRaises(ValueError):
+            Mission.from_dict(
+                {
+                    "name": "broken-mission",
+                    "goal": "Design a prompt.",
+                    "constraints": ["No live trading."],
+                    "success_criteria": "Structured output.",
+                    "deliverables": ["plan"],
+                }
+            )
+
+    def test_mission_rejects_string_deliverables(self):
+        with self.assertRaises(ValueError):
+            Mission.from_dict(
+                {
+                    "name": "broken-mission",
+                    "goal": "Design a prompt.",
+                    "constraints": ["No live trading."],
+                    "success_criteria": ["Structured output."],
+                    "deliverables": "plan",
+                }
+            )
+
+    def test_mission_rejects_string_domain_terms(self):
+        with self.assertRaises(ValueError):
+            Mission.from_dict(
+                {
+                    "name": "broken-mission",
+                    "goal": "Design a prompt.",
+                    "constraints": ["No live trading."],
+                    "success_criteria": ["Structured output."],
+                    "deliverables": ["plan"],
+                    "domain_terms": "triage",
+                }
+            )
+
+    def test_cli_writes_artifacts_for_valid_mission_file(self):
+        repo_root = Path(__file__).resolve().parent
+        mission_file = repo_root / "examples" / "hyperliquid-mission.json"
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_dir = Path(tmpdir) / "cli-artifacts"
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "fractal_prompt_foundry",
+                    "--mission-file",
+                    str(mission_file),
+                    "--rounds",
+                    "2",
+                    "--output-dir",
+                    str(output_dir),
+                ],
+                cwd=repo_root,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            payload = json.loads(proc.stdout.split("\nArtifacts:\n", 1)[0])
+            self.assertEqual(payload["mission"], "hyperliquid-agent-loop")
+            self.assertTrue((output_dir / "result.json").exists())
+            self.assertTrue((output_dir / "report.md").exists())
+
+    def test_run_rejects_non_positive_rounds(self):
+        with self.assertRaises(ValueError):
+            FractalPromptFoundry(demo_mission()).run(rounds=0)
+
+    def test_constructor_rejects_non_positive_population_size(self):
+        with self.assertRaises(ValueError):
+            FractalPromptFoundry(demo_mission(), population_size=0)
+
+    def test_cli_rejects_non_positive_rounds_without_traceback_noise(self):
+        repo_root = Path(__file__).resolve().parent
+        proc = subprocess.run(
+            [sys.executable, "-m", "fractal_prompt_foundry", "--rounds", "0"],
+            cwd=repo_root,
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("rounds must be a positive integer", proc.stderr)
+        self.assertNotIn("Traceback", proc.stderr)
+
+    def test_cli_rejects_non_positive_population_size_without_traceback_noise(self):
+        repo_root = Path(__file__).resolve().parent
+        proc = subprocess.run(
+            [sys.executable, "-m", "fractal_prompt_foundry", "--population-size", "0"],
+            cwd=repo_root,
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("population_size must be a positive integer", proc.stderr)
+        self.assertNotIn("Traceback", proc.stderr)
+
+    def test_cli_rejects_missing_mission_file_without_traceback_noise(self):
+        repo_root = Path(__file__).resolve().parent
+        proc = subprocess.run(
+            [sys.executable, "-m", "fractal_prompt_foundry", "--mission-file", "examples/does-not-exist.json"],
+            cwd=repo_root,
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("mission file not found", proc.stderr.lower())
+        self.assertNotIn("Traceback", proc.stderr)
+
+    def test_cli_rejects_invalid_json_mission_file_without_traceback_noise(self):
+        repo_root = Path(__file__).resolve().parent
+        with tempfile.TemporaryDirectory() as tmpdir:
+            bad_file = Path(tmpdir) / "bad-mission.json"
+            bad_file.write_text('{"name": "broken",', encoding="utf-8")
+            proc = subprocess.run(
+                [sys.executable, "-m", "fractal_prompt_foundry", "--mission-file", str(bad_file)],
+                cwd=repo_root,
+                capture_output=True,
+                text=True,
+            )
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("invalid json", proc.stderr.lower())
+        self.assertNotIn("Traceback", proc.stderr)
 
 
 if __name__ == "__main__":

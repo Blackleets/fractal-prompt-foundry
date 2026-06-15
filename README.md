@@ -238,6 +238,17 @@ Metric snapshot:
 
 ## Quickstart
 
+### Claude Code / Codex
+
+This repo now ships an `AGENTS.md` at the root so Claude Code, Codex, and other agent-aware tools can inherit the intended development style automatically.
+
+What it enforces:
+
+- keep the prototype deterministic and local-first
+- prefer stdlib and small diffs
+- avoid premature modularization and unnecessary dependencies
+- verify changes with `python demo.py` and `python test_foundry.py`
+
 ### Clone and run
 
 ```bash

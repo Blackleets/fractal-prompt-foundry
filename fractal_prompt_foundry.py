@@ -7,7 +7,6 @@ from typing import Any, List, Dict, Tuple
 import hashlib
 import itertools
 import json
-import math
 import re
 
 
@@ -20,6 +19,17 @@ class Mission:
     deliverables: List[str]
     domain_terms: List[str] = field(default_factory=list)
 
+    @staticmethod
+    def _string_list(data: Dict[str, Any], field_name: str, *, required: bool = True) -> List[str]:
+        value = data.get(field_name)
+        if value is None:
+            if required:
+                raise ValueError(f"Mission data is missing required fields: {field_name}")
+            return []
+        if isinstance(value, str) or not isinstance(value, list):
+            raise ValueError(f"Mission field '{field_name}' must be a list of strings.")
+        return [str(item) for item in value]
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Mission":
         required = ["name", "goal", "constraints", "success_criteria", "deliverables"]
@@ -29,15 +39,23 @@ class Mission:
         return cls(
             name=str(data["name"]),
             goal=str(data["goal"]),
-            constraints=[str(item) for item in data["constraints"]],
-            success_criteria=[str(item) for item in data["success_criteria"]],
-            deliverables=[str(item) for item in data["deliverables"]],
-            domain_terms=[str(item) for item in data.get("domain_terms", [])],
+            constraints=cls._string_list(data, "constraints"),
+            success_criteria=cls._string_list(data, "success_criteria"),
+            deliverables=cls._string_list(data, "deliverables"),
+            domain_terms=cls._string_list(data, "domain_terms", required=False),
         )
 
     @classmethod
     def from_json_file(cls, path: str | Path) -> "Mission":
-        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        path_obj = Path(path)
+        try:
+            raw = path_obj.read_text(encoding="utf-8")
+        except FileNotFoundError as exc:
+            raise ValueError(f"Mission file not found: {path_obj}") from exc
+        try:
+            payload = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"Invalid JSON in mission file: {path_obj}") from exc
         return cls.from_dict(payload)
 
 
@@ -84,11 +102,15 @@ class FractalPromptFoundry:
     }
 
     def __init__(self, mission: Mission, population_size: int = 5):
+        if population_size <= 0:
+            raise ValueError("population_size must be a positive integer")
         self.mission = mission
         self.population_size = population_size
         self.history: List[Tuple[Candidate, Evaluation]] = []
 
     def run(self, rounds: int = 3) -> Dict[str, object]:
+        if rounds <= 0:
+            raise ValueError("rounds must be a positive integer")
         population = self.seed_population()
 
         for round_index in range(rounds):
@@ -345,19 +367,12 @@ class FractalPromptFoundry:
         return True
 
     def target_terms(self) -> List[str]:
-        terms = []
-        terms.extend(self.mission.domain_terms)
+        terms = list(self.mission.domain_terms)
         terms.extend(self.extract_keywords(self.mission.goal))
         for item in self.mission.constraints + self.mission.success_criteria + self.mission.deliverables:
             terms.extend(self.extract_keywords(item))
-        deduped = []
-        for term in terms:
-            t = term.strip().lower()
-            if len(t) < 4:
-                continue
-            if t not in deduped:
-                deduped.append(t)
-        return deduped[:24]
+        normalized = [term.strip().lower() for term in terms if len(term.strip()) >= 4]
+        return list(dict.fromkeys(normalized))[:24]
 
     @staticmethod
     def extract_keywords(text: str) -> List[str]:
@@ -630,13 +645,16 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_arg_parser()
     args = parser.parse_args(argv)
 
-    mission = Mission.from_json_file(args.mission_file) if args.mission_file else demo_mission()
-    _, result, artifacts = run_mission(
-        mission,
-        rounds=args.rounds,
-        population_size=args.population_size,
-        output_dir=args.output_dir,
-    )
+    try:
+        mission = Mission.from_json_file(args.mission_file) if args.mission_file else demo_mission()
+        _, result, artifacts = run_mission(
+            mission,
+            rounds=args.rounds,
+            population_size=args.population_size,
+            output_dir=args.output_dir,
+        )
+    except ValueError as exc:
+        parser.exit(2, f"error: {exc}\n")
 
     if args.print_report:
         print(result["report_markdown"])

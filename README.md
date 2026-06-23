@@ -68,10 +68,18 @@ A run can emit:
 - `report.md`
 - `lineage_mermaid`
 - `genome_profile`
+- `evolved_genome_profile`
+- `evolution_summary`
 - `round_summaries`
 - `uniqueness_thesis`
 
 That makes the concept easier to test, share, and extend.
+
+New in the current version:
+
+- `baseline_diff` for seed-vs-evolved prompt deltas
+- benchmark suite outputs across multiple missions
+- per-mission benchmark reports plus a portfolio summary
 
 ### 3. It is a useful prototype for bigger agent products
 You can imagine this sitting before:
@@ -111,10 +119,20 @@ python -m fractal_prompt_foundry \
   --output-dir artifacts/custom-run
 ```
 
+### Option D — run the benchmark suite
+
+```bash
+python benchmark.py
+```
+
 Artifacts are written to:
 
 - `artifacts/demo-run/result.json`
 - `artifacts/demo-run/report.md`
+- `artifacts/benchmarks/summary.json`
+- `artifacts/benchmarks/summary.md`
+- `artifacts/benchmarks/<mission>/result.json`
+- `artifacts/benchmarks/<mission>/report.md`
 
 ---
 
@@ -164,9 +182,11 @@ Each run can emit:
 
 - `result.json`
 - `report.md`
+- `baseline_diff` with seed-vs-evolved prompt changes
 - a Mermaid lineage graph of how the champion evolved
 - round winners by generation
 - a uniqueness thesis that explains why the run matters
+- benchmark portfolio summaries across missions
 
 ---
 
@@ -206,30 +226,45 @@ The included demo evolves prompts for a **Hyperliquid research-agent mission** w
 - reusable outputs across specialist agents
 
 ### Real output observed
-The prototype was executed successfully and produced this real result:
+The prototype was executed successfully and now reports both the **global best candidate** and the **best evolved candidate** so you can see whether evolution actually outperformed the seed baseline.
+
+Observed demo result:
 
 - **Mission:** `hyperliquid-agent-loop`
-- **Best candidate:** `seed-1`
-- **Best style:** `architect`
-- **Best score:** `0.995`
-- **Genome ID:** `6667f13ac0fb`
+- **Global best candidate:** `r3-mut-5`
+- **Global best style:** `critic+architect+operator`
+- **Global best score:** `0.932`
+- **Best evolved candidate:** `r3-mut-5`
+- **Best evolved score:** `0.932`
+- **Evolution delta vs seed:** `+0.204`
+- **Evolution outperformed seed:** `True`
+
+Observed benchmark portfolio:
+
+- **Missions:** `3`
+- **Average evolved winner score:** `0.923`
+- **Average delta vs seed:** `+0.221`
+- **Evolution beat seed rate:** `1.0`
+- **Winning lane frequency:** `critic=3`, `architect=3`, `operator=3`
 
 Top leaderboard snapshot:
 
-- `seed-1` — `architect` — `0.995`
-- `r1-hyb-1` — `architect+critic` — `0.907`
-- `seed-3` — `critic` — `0.890`
-- `seed-2` — `operator` — `0.889`
-- `seed-4` — `compressor` — `0.888`
+- `r3-mut-5` — `critic+architect+operator` — `0.932`
+- `r2-hyb-3` — `critic+operator+architect` — `0.929`
+- `r2-hyb-1` — `critic+architect+operator` — `0.929`
+- `r2-hyb-2` — `critic+architect+operator` — `0.929`
+- `r3-hyb-1` — `critic+operator+architect` — `0.926`
 
-Metric snapshot:
+Metric snapshot for the evolved champion:
 
 ```json
 {
   "coverage": 1.0,
   "structure": 1.0,
   "actionability": 1.0,
-  "novelty": 1.0,
+  "refinement": 1.0,
+  "evolutionary_gain": 0.85,
+  "novelty": 0.394,
   "anti_vague": 0.95
 }
 ```
@@ -263,6 +298,12 @@ python demo.py
 python test_foundry.py
 ```
 
+### Run the benchmark suite
+
+```bash
+python benchmark.py
+```
+
 ### Use the packaged CLI locally
 
 ```bash
@@ -288,6 +329,8 @@ fractal-foundry --mission-file examples/hyperliquid-mission.json --rounds 4 --pr
 See:
 
 - `examples/hyperliquid-mission.json`
+- `examples/support-triage-mission.json`
+- `examples/code-review-mission.json`
 
 ---
 
@@ -300,9 +343,9 @@ If you want to improve the project or submit ideas, start here:
 The easiest valuable contributions right now are:
 
 - new mission examples
-- scoring improvements
-- better lineage / artifact visualization
-- benchmark scenarios for real agent workflows
+- real-agent evaluators and harder benchmark missions
+- richer visual diffing between generations
+- SVG lineage / benchmark dashboards
 
 ---
 
@@ -311,6 +354,12 @@ The easiest valuable contributions right now are:
 ```text
 fractal-prompt-foundry/
 ├── artifacts/
+│   ├── benchmarks/
+│   │   ├── summary.json
+│   │   ├── summary.md
+│   │   └── <mission>/
+│   │       ├── report.md
+│   │       └── result.json
 │   └── demo-run/
 │       ├── report.md
 │       └── result.json
@@ -318,9 +367,12 @@ fractal-prompt-foundry/
 │   ├── architecture.svg
 │   ├── hero.svg
 │   └── social-preview.svg
+├── benchmark.py
 ├── CONTRIBUTING.md
 ├── examples/
-│   └── hyperliquid-mission.json
+│   ├── code-review-mission.json
+│   ├── hyperliquid-mission.json
+│   └── support-triage-mission.json
 ├── fractal_prompt_foundry.py
 ├── demo.py
 ├── test_foundry.py
@@ -340,6 +392,10 @@ fractal-prompt-foundry/
 - novelty gating
 - leaderboard output
 - genome profiling
+- evolved-vs-seed reporting
+- baseline diff reporting
+- multi-mission benchmark suite
+- lane-frequency summary across winners
 - lineage reporting
 - JSON + markdown artifacts
 - runnable CLI path
@@ -354,8 +410,8 @@ If you want the repo to become more desirable to developers, the highest-leverag
 
 ### Near-term upgrades
 - swap the deterministic evaluator for real agent calls
-- add side-by-side prompt diffs between generations
-- include benchmark missions across coding / research / trading
+- add richer prompt diffs between generations with semantic grouping
+- include more benchmark missions across coding / research / trading / ops
 - add JSON schema validation for mission files
 - export SVG lineage graphs directly, not just Mermaid
 

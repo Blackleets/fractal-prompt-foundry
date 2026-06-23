@@ -1,22 +1,22 @@
-# Fractal Prompt Foundry Report — hyperliquid-agent-loop
+# Fractal Prompt Foundry Report — code-review-agent
 
 ## Global best candidate
 - Candidate: `r3-mut-5`
 - Style: `critic+architect+operator`
-- Score: `0.932`
-- Genome ID: `dbe159ea6483`
+- Score: `0.931`
+- Genome ID: `1901212ac024`
 
 ## Best evolved candidate
 - Candidate: `r3-mut-5`
 - Style: `critic+architect+operator`
-- Score: `0.932`
-- Genome ID: `dbe159ea6483`
+- Score: `0.931`
+- Genome ID: `1901212ac024`
 
 ## Evolution verdict
 - Final round: `3`
-- Seed baseline: `seed-3` → `0.727`
-- Evolved best: `r3-mut-5` → `0.932`
-- Delta vs seed: `0.204`
+- Seed baseline: `seed-3` → `0.702`
+- Evolved best: `r3-mut-5` → `0.931`
+- Delta vs seed: `0.229`
 - Delta vs global best: `0.0`
 - Evolution outperformed seed: `True`
 
@@ -31,7 +31,7 @@
 - actionability: `1.0`
 - refinement: `1.0`
 - evolutionary_gain: `0.85`
-- novelty: `0.394`
+- novelty: `0.391`
 - anti_vague: `0.95`
 
 ## Evolved genome profile
@@ -45,16 +45,16 @@
 ## Baseline vs evolved diff
 - Seed baseline: `seed-3` (critic)
 - Evolved champion: `r3-mut-5` (critic+architect+operator)
-- Score delta: `0.204`
+- Score delta: `0.229`
 
 ### Metric deltas
 - coverage: `+0.000`
 - structure: `+0.000`
-- actionability: `+0.000`
+- actionability: `+0.125`
 - refinement: `+0.800`
 - evolutionary_gain: `+0.850`
-- novelty: `-0.211`
-- anti_vague: `+0.000`
+- novelty: `-0.213`
+- anti_vague: `+0.050`
 
 ### Added prompt lines
 - ROLE LANE: CRITIC+ARCHITECT+OPERATOR
@@ -73,15 +73,15 @@
 - Think in risks, edge cases, weak assumptions, and adversarial checks.
 
 ## Round winners
-- Round 0: `seed-3` (critic) → `0.727`
-- Round 1: `r1-hyb-2` (critic+architect) → `0.911`
-- Round 2: `r2-hyb-3` (critic+operator+architect) → `0.929`
-- Round 3: `r3-mut-5` (critic+architect+operator) → `0.932`
+- Round 0: `seed-3` (critic) → `0.702`
+- Round 1: `r1-hyb-2` (critic+architect) → `0.906`
+- Round 2: `r2-hyb-3` (critic+operator+architect) → `0.924`
+- Round 3: `r3-mut-5` (critic+architect+operator) → `0.931`
 
 ## Lineage graph
 ```mermaid
 flowchart LR
-    mission["Mission: hyperliquid-agent-loop"]
+    mission["Mission: code-review-agent"]
     seed_3["seed-3\ncritic"]
     mission --> seed_3
     seed_1["seed-1\narchitect"]

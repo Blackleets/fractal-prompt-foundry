@@ -1,0 +1,32 @@
+{
+  "name": "support-triage-agent",
+  "goal": "Design a prompt for an autonomous support triage agent that classifies inbound tickets, identifies urgency, and proposes safe next actions for a human support team.",
+  "constraints": [
+    "No direct customer messaging or account changes.",
+    "Must separate urgent security or billing issues from normal requests.",
+    "Should produce assumptions, escalation reasons, and missing information requests.",
+    "Keep the prompt reusable across SaaS support queues."
+  ],
+  "success_criteria": [
+    "Prompt asks for structured triage output.",
+    "Prompt forces risk and escalation review before recommendations.",
+    "Prompt includes validation checks and failure modes.",
+    "Prompt reduces vague classification behavior."
+  ],
+  "deliverables": [
+    "ticket summary",
+    "priority classification",
+    "risk flags",
+    "recommended next action"
+  ],
+  "domain_terms": [
+    "triage",
+    "sla",
+    "escalation",
+    "billing",
+    "authentication",
+    "security",
+    "severity",
+    "customer impact"
+  ]
+}

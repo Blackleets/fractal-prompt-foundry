@@ -1,0 +1,261 @@
+{
+  "mission": "support-triage-agent",
+  "best_candidate": {
+    "candidate_id": "r3-mut-5",
+    "style": "operator+critic+architect",
+    "lineage": [
+      "seed",
+      "seed-2",
+      "seed-3",
+      "r1-hyb-1",
+      "r1-hyb-2",
+      "r2-hyb-3"
+    ],
+    "prompt": "ROLE LANE: OPERATOR+CRITIC+ARCHITECT\nMerge the strengths of operator+critic and operator+architect. Preserve operational clarity, inject critique and edge-case pressure, and make the final output feel decisively executable.\nPRIMARY GOAL: Design a prompt for an autonomous support triage agent that classifies inbound tickets, identifies urgency, and proposes safe next actions for a human support team.\nCONSTRAINTS:\n- No direct customer messaging or account changes.\n- Must separate urgent security or billing issues from normal requests.\n- Should produce assumptions, escalation reasons, and missing information requests.\n- Keep the prompt reusable across SaaS support queues.\nSUCCESS CRITERIA:\n- Prompt asks for structured triage output.\n- Prompt forces risk and escalation review before recommendations.\n- Prompt includes validation checks and failure modes.\n- Prompt reduces vague classification behavior.\nDELIVERABLES:\n- ticket summary\n- priority classification\n- risk flags\n- recommended next action\nOPERATING RULES:\n- Think step-by-step internally but output only actionable results.\n- Use explicit assumptions when data is missing.\n- Surface risks before final recommendations.\n- Prefer structured output over vague prose.\nDOMAIN TERMS TO USE WHEN RELEVANT:\n- triage\n- sla\n- escalation\n- billing\n- authentication\n- security\n- severity\n- customer impact\nREFINEMENT PRESSURE:\n- Force one measurable validation step.\n- Add a failure-mode paragraph.\n- State a prioritised next action at the end.\n- Add one compact system map: inputs, decision layer, safety layer, outputs.\n- Specify one observability block with logs, metrics, and abort conditions.\n- Name the weakest assumption and how to falsify it before acting.\n- Tag this refinement pass as round 3, variant 5 in the internal planning logic.\nOUTPUT FORMAT: Summary, Plan, Risks, Validation, Next Action.",
+    "notes": [
+      "hybrid lineage",
+      "mutation lane"
+    ]
+  },
+  "best_evaluation": {
+    "total_score": 0.906,
+    "metrics": {
+      "coverage": 1.0,
+      "structure": 1.0,
+      "actionability": 0.875,
+      "refinement": 1.0,
+      "evolutionary_gain": 0.85,
+      "novelty": 0.39,
+      "anti_vague": 0.9
+    },
+    "missing_terms": [],
+    "critique": [
+      "Too similar to previous prompt DNA; mutation should introduce a new angle."
+    ],
+    "result_summary": "Round 3 candidate r3-mut-5 covered 24/24 key terms with a total pressure score of 0.906."
+  },
+  "evolved_candidate": {
+    "candidate_id": "r3-mut-5",
+    "style": "operator+critic+architect",
+    "lineage": [
+      "seed",
+      "seed-2",
+      "seed-3",
+      "r1-hyb-1",
+      "r1-hyb-2",
+      "r2-hyb-3"
+    ],
+    "prompt": "ROLE LANE: OPERATOR+CRITIC+ARCHITECT\nMerge the strengths of operator+critic and operator+architect. Preserve operational clarity, inject critique and edge-case pressure, and make the final output feel decisively executable.\nPRIMARY GOAL: Design a prompt for an autonomous support triage agent that classifies inbound tickets, identifies urgency, and proposes safe next actions for a human support team.\nCONSTRAINTS:\n- No direct customer messaging or account changes.\n- Must separate urgent security or billing issues from normal requests.\n- Should produce assumptions, escalation reasons, and missing information requests.\n- Keep the prompt reusable across SaaS support queues.\nSUCCESS CRITERIA:\n- Prompt asks for structured triage output.\n- Prompt forces risk and escalation review before recommendations.\n- Prompt includes validation checks and failure modes.\n- Prompt reduces vague classification behavior.\nDELIVERABLES:\n- ticket summary\n- priority classification\n- risk flags\n- recommended next action\nOPERATING RULES:\n- Think step-by-step internally but output only actionable results.\n- Use explicit assumptions when data is missing.\n- Surface risks before final recommendations.\n- Prefer structured output over vague prose.\nDOMAIN TERMS TO USE WHEN RELEVANT:\n- triage\n- sla\n- escalation\n- billing\n- authentication\n- security\n- severity\n- customer impact\nREFINEMENT PRESSURE:\n- Force one measurable validation step.\n- Add a failure-mode paragraph.\n- State a prioritised next action at the end.\n- Add one compact system map: inputs, decision layer, safety layer, outputs.\n- Specify one observability block with logs, metrics, and abort conditions.\n- Name the weakest assumption and how to falsify it before acting.\n- Tag this refinement pass as round 3, variant 5 in the internal planning logic.\nOUTPUT FORMAT: Summary, Plan, Risks, Validation, Next Action.",
+    "notes": [
+      "hybrid lineage",
+      "mutation lane"
+    ]
+  },
+  "evolved_evaluation": {
+    "total_score": 0.906,
+    "metrics": {
+      "coverage": 1.0,
+      "structure": 1.0,
+      "actionability": 0.875,
+      "refinement": 1.0,
+      "evolutionary_gain": 0.85,
+      "novelty": 0.39,
+      "anti_vague": 0.9
+    },
+    "missing_terms": [],
+    "critique": [
+      "Too similar to previous prompt DNA; mutation should introduce a new angle."
+    ],
+    "result_summary": "Round 3 candidate r3-mut-5 covered 24/24 key terms with a total pressure score of 0.906."
+  },
+  "leaderboard": [
+    {
+      "candidate_id": "r3-mut-5",
+      "style": "operator+critic+architect",
+      "score": 0.906,
+      "round": 3
+    },
+    {
+      "candidate_id": "r2-hyb-1",
+      "style": "critic+architect+operator",
+      "score": 0.905,
+      "round": 2
+    },
+    {
+      "candidate_id": "r2-hyb-2",
+      "style": "critic+architect+operator",
+      "score": 0.904,
+      "round": 2
+    },
+    {
+      "candidate_id": "r2-hyb-3",
+      "style": "operator+critic+architect",
+      "score": 0.904,
+      "round": 2
+    },
+    {
+      "candidate_id": "r3-hyb-1",
+      "style": "critic+architect+operator",
+      "score": 0.9,
+      "round": 3
+    },
+    {
+      "candidate_id": "r3-hyb-2",
+      "style": "critic+architect+operator",
+      "score": 0.9,
+      "round": 3
+    },
+    {
+      "candidate_id": "r3-elite-1",
+      "style": "critic+architect+operator",
+      "score": 0.895,
+      "round": 3
+    },
+    {
+      "candidate_id": "r3-elite-2",
+      "style": "critic+architect+operator",
+      "score": 0.895,
+      "round": 3
+    },
+    {
+      "candidate_id": "r1-hyb-3",
+      "style": "critic+architect",
+      "score": 0.886,
+      "round": 1
+    },
+    {
+      "candidate_id": "r1-hyb-1",
+      "style": "operator+critic",
+      "score": 0.885,
+      "round": 1
+    }
+  ],
+  "round_summaries": [
+    {
+      "round": 0,
+      "winner_id": "seed-2",
+      "winner_style": "operator",
+      "winner_score": 0.677,
+      "population_size": 5
+    },
+    {
+      "round": 1,
+      "winner_id": "r1-hyb-3",
+      "winner_style": "critic+architect",
+      "winner_score": 0.886,
+      "population_size": 5
+    },
+    {
+      "round": 2,
+      "winner_id": "r2-hyb-1",
+      "winner_style": "critic+architect+operator",
+      "winner_score": 0.905,
+      "population_size": 5
+    },
+    {
+      "round": 3,
+      "winner_id": "r3-mut-5",
+      "winner_style": "operator+critic+architect",
+      "winner_score": 0.906,
+      "population_size": 5
+    }
+  ],
+  "genome_profile": {
+    "genome_id": "21aa51783245",
+    "prompt_checksum": "11cde058b9e82bb7",
+    "lineage_depth": 6,
+    "lane_mix": [
+      "operator",
+      "critic",
+      "architect"
+    ],
+    "bullet_density": 1.0,
+    "imperative_density": 1.0,
+    "control_density": 0.833,
+    "domain_saturation": 1.0,
+    "pressure_balance": {
+      "coverage": 1.0,
+      "structure": 1.0,
+      "actionability": 0.875,
+      "refinement": 1.0,
+      "evolutionary_gain": 0.85,
+      "novelty": 0.39,
+      "anti_vague": 0.9
+    }
+  },
+  "evolved_genome_profile": {
+    "genome_id": "21aa51783245",
+    "prompt_checksum": "11cde058b9e82bb7",
+    "lineage_depth": 6,
+    "lane_mix": [
+      "operator",
+      "critic",
+      "architect"
+    ],
+    "bullet_density": 1.0,
+    "imperative_density": 1.0,
+    "control_density": 0.833,
+    "domain_saturation": 1.0,
+    "pressure_balance": {
+      "coverage": 1.0,
+      "structure": 1.0,
+      "actionability": 0.875,
+      "refinement": 1.0,
+      "evolutionary_gain": 0.85,
+      "novelty": 0.39,
+      "anti_vague": 0.9
+    }
+  },
+  "baseline_diff": {
+    "seed_candidate_id": "seed-2",
+    "evolved_candidate_id": "r3-mut-5",
+    "seed_style": "operator",
+    "evolved_style": "operator+critic+architect",
+    "added_lines": [
+      "ROLE LANE: OPERATOR+CRITIC+ARCHITECT",
+      "Merge the strengths of operator+critic and operator+architect. Preserve operational clarity, inject critique and edge-case pressure, and make the final output feel decisively executable.",
+      "REFINEMENT PRESSURE:",
+      "- Force one measurable validation step.",
+      "- Add a failure-mode paragraph.",
+      "- State a prioritised next action at the end.",
+      "- Add one compact system map: inputs, decision layer, safety layer, outputs.",
+      "- Specify one observability block with logs, metrics, and abort conditions.",
+      "- Name the weakest assumption and how to falsify it before acting.",
+      "- Tag this refinement pass as round 3, variant 5 in the internal planning logic."
+    ],
+    "removed_lines": [
+      "ROLE LANE: OPERATOR",
+      "Think in execution steps, observability, and safe operations."
+    ],
+    "metric_delta": {
+      "coverage": 0.0,
+      "structure": 0.0,
+      "actionability": 0.125,
+      "refinement": 0.8,
+      "evolutionary_gain": 0.85,
+      "novelty": -0.209,
+      "anti_vague": 0.05
+    },
+    "score_delta": 0.229
+  },
+  "lineage_mermaid": "flowchart LR\n    mission[\"Mission: support-triage-agent\"]\n    seed_2[\"seed-2\\noperator\"]\n    mission --> seed_2\n    seed_3[\"seed-3\\ncritic\"]\n    seed_2 --> seed_3\n    r1_hyb_1[\"r1-hyb-1\\noperator+critic\"]\n    seed_3 --> r1_hyb_1\n    r1_hyb_2[\"r1-hyb-2\\noperator+architect\"]\n    r1_hyb_1 --> r1_hyb_2\n    r2_hyb_3[\"r2-hyb-3\\noperator+critic+architect\"]\n    r1_hyb_2 --> r2_hyb_3\n    r3_mut_5[\"r3-mut-5\\noperator+critic+architect\"]\n    r2_hyb_3 --> r3_mut_5",
+  "uniqueness_thesis": [
+    "Treat prompts as versioned genomes instead of static templates.",
+    "Expose lineage, pressure scores, and novelty gating as first-class artifacts.",
+    "Champion prompt emerged from lane recombination: operator + critic + architect."
+  ],
+  "evolution_summary": {
+    "final_round": 3,
+    "global_best_candidate_id": "r3-mut-5",
+    "global_best_score": 0.906,
+    "evolved_best_candidate_id": "r3-mut-5",
+    "evolved_best_score": 0.906,
+    "seed_best_candidate_id": "seed-2",
+    "seed_best_score": 0.677,
+    "score_delta_vs_seed": 0.229,
+    "score_delta_vs_global_best": 0.0,
+    "evolution_outperformed_seed": true,
+    "evolution_found_global_best": true
+  },
+  "report_markdown": "# Fractal Prompt Foundry Report \u2014 support-triage-agent\n\n## Global best candidate\n- Candidate: `r3-mut-5`\n- Style: `operator+critic+architect`\n- Score: `0.906`\n- Genome ID: `21aa51783245`\n\n## Best evolved candidate\n- Candidate: `r3-mut-5`\n- Style: `operator+critic+architect`\n- Score: `0.906`\n- Genome ID: `21aa51783245`\n\n## Evolution verdict\n- Final round: `3`\n- Seed baseline: `seed-2` \u2192 `0.677`\n- Evolved best: `r3-mut-5` \u2192 `0.906`\n- Delta vs seed: `0.229`\n- Delta vs global best: `0.0`\n- Evolution outperformed seed: `True`\n\n## Why this run feels unique\n- Treat prompts as versioned genomes instead of static templates.\n- Expose lineage, pressure scores, and novelty gating as first-class artifacts.\n- Champion prompt emerged from lane recombination: operator + critic + architect.\n\n## Pressure balance\n- coverage: `1.0`\n- structure: `1.0`\n- actionability: `0.875`\n- refinement: `1.0`\n- evolutionary_gain: `0.85`\n- novelty: `0.39`\n- anti_vague: `0.9`\n\n## Evolved genome profile\n- Lane mix: `operator, critic, architect`\n- Lineage depth: `6`\n- Bullet density: `1.0`\n- Imperative density: `1.0`\n- Control density: `0.833`\n- Domain saturation: `1.0`\n\n## Baseline vs evolved diff\n- Seed baseline: `seed-2` (operator)\n- Evolved champion: `r3-mut-5` (operator+critic+architect)\n- Score delta: `0.229`\n\n### Metric deltas\n- coverage: `+0.000`\n- structure: `+0.000`\n- actionability: `+0.125`\n- refinement: `+0.800`\n- evolutionary_gain: `+0.850`\n- novelty: `-0.209`\n- anti_vague: `+0.050`\n\n### Added prompt lines\n- ROLE LANE: OPERATOR+CRITIC+ARCHITECT\n- Merge the strengths of operator+critic and operator+architect. Preserve operational clarity, inject critique and edge-case pressure, and make the final output feel decisively executable.\n- REFINEMENT PRESSURE:\n- - Force one measurable validation step.\n- - Add a failure-mode paragraph.\n- - State a prioritised next action at the end.\n- - Add one compact system map: inputs, decision layer, safety layer, outputs.\n- - Specify one observability block with logs, metrics, and abort conditions.\n- - Name the weakest assumption and how to falsify it before acting.\n- - Tag this refinement pass as round 3, variant 5 in the internal planning logic.\n\n### Removed prompt lines\n- ROLE LANE: OPERATOR\n- Think in execution steps, observability, and safe operations.\n\n## Round winners\n- Round 0: `seed-2` (operator) \u2192 `0.677`\n- Round 1: `r1-hyb-3` (critic+architect) \u2192 `0.886`\n- Round 2: `r2-hyb-1` (critic+architect+operator) \u2192 `0.905`\n- Round 3: `r3-mut-5` (operator+critic+architect) \u2192 `0.906`\n\n## Lineage graph\n```mermaid\nflowchart LR\n    mission[\"Mission: support-triage-agent\"]\n    seed_2[\"seed-2\\noperator\"]\n    mission --> seed_2\n    seed_3[\"seed-3\\ncritic\"]\n    seed_2 --> seed_3\n    r1_hyb_1[\"r1-hyb-1\\noperator+critic\"]\n    seed_3 --> r1_hyb_1\n    r1_hyb_2[\"r1-hyb-2\\noperator+architect\"]\n    r1_hyb_1 --> r1_hyb_2\n    r2_hyb_3[\"r2-hyb-3\\noperator+critic+architect\"]\n    r1_hyb_2 --> r2_hyb_3\n    r3_mut_5[\"r3-mut-5\\noperator+critic+architect\"]\n    r2_hyb_3 --> r3_mut_5\n```"
+}

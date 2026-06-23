@@ -114,9 +114,16 @@ class FractalPromptFoundry:
         population = self.seed_population()
 
         for round_index in range(rounds):
+            prior_prompts = [prev_candidate.prompt for prev_candidate, _ in self.history]
             scored: List[Tuple[Candidate, Evaluation]] = []
             for candidate in population:
-                evaluation = self.evaluate_candidate(candidate, round_index)
+                peer_prompts = [peer.prompt for peer in population if peer.candidate_id != candidate.candidate_id]
+                evaluation = self.evaluate_candidate(
+                    candidate,
+                    round_index,
+                    prior_prompts=prior_prompts,
+                    peer_prompts=peer_prompts,
+                )
                 scored.append((candidate, evaluation))
                 self.history.append((candidate, evaluation))
 
@@ -125,6 +132,23 @@ class FractalPromptFoundry:
             population = self.spawn_next_population(elite, scored, round_index + 1)
 
         best_candidate, best_evaluation = max(self.history, key=lambda item: item[1].total_score)
+        final_round = max(candidate.round_index for candidate, _ in self.history)
+        evolved_candidate, evolved_evaluation = max(
+            (
+                (candidate, evaluation)
+                for candidate, evaluation in self.history
+                if candidate.round_index == final_round
+            ),
+            key=lambda item: item[1].total_score,
+        )
+        first_round_candidate, first_round_evaluation = max(
+            (
+                (candidate, evaluation)
+                for candidate, evaluation in self.history
+                if candidate.round_index == 0
+            ),
+            key=lambda item: item[1].total_score,
+        )
         leaderboard = [
             {
                 "candidate_id": candidate.candidate_id,
@@ -135,8 +159,10 @@ class FractalPromptFoundry:
             for candidate, evaluation in sorted(self.history, key=lambda item: item[1].total_score, reverse=True)[:10]
         ]
         round_summaries = self.round_summaries()
-        lineage_mermaid = self.render_mermaid_lineage(best_candidate)
+        lineage_mermaid = self.render_mermaid_lineage(evolved_candidate)
         genome_profile = self.candidate_genome(best_candidate, best_evaluation)
+        evolved_genome_profile = self.candidate_genome(evolved_candidate, evolved_evaluation)
+        baseline_diff = self.baseline_diff(first_round_candidate, first_round_evaluation, evolved_candidate, evolved_evaluation)
         result = {
             "mission": self.mission.name,
             "best_candidate": {
@@ -153,11 +179,40 @@ class FractalPromptFoundry:
                 "critique": best_evaluation.critique,
                 "result_summary": best_evaluation.result_summary,
             },
+            "evolved_candidate": {
+                "candidate_id": evolved_candidate.candidate_id,
+                "style": evolved_candidate.style,
+                "lineage": evolved_candidate.lineage,
+                "prompt": evolved_candidate.prompt,
+                "notes": evolved_candidate.notes,
+            },
+            "evolved_evaluation": {
+                "total_score": round(evolved_evaluation.total_score, 3),
+                "metrics": {k: round(v, 3) for k, v in evolved_evaluation.metrics.items()},
+                "missing_terms": evolved_evaluation.missing_terms,
+                "critique": evolved_evaluation.critique,
+                "result_summary": evolved_evaluation.result_summary,
+            },
             "leaderboard": leaderboard,
             "round_summaries": round_summaries,
             "genome_profile": genome_profile,
+            "evolved_genome_profile": evolved_genome_profile,
+            "baseline_diff": baseline_diff,
             "lineage_mermaid": lineage_mermaid,
-            "uniqueness_thesis": self.uniqueness_thesis(best_candidate, best_evaluation),
+            "uniqueness_thesis": self.uniqueness_thesis(evolved_candidate, evolved_evaluation),
+            "evolution_summary": {
+                "final_round": final_round,
+                "global_best_candidate_id": best_candidate.candidate_id,
+                "global_best_score": round(best_evaluation.total_score, 3),
+                "evolved_best_candidate_id": evolved_candidate.candidate_id,
+                "evolved_best_score": round(evolved_evaluation.total_score, 3),
+                "seed_best_candidate_id": first_round_candidate.candidate_id,
+                "seed_best_score": round(first_round_evaluation.total_score, 3),
+                "score_delta_vs_seed": round(evolved_evaluation.total_score - first_round_evaluation.total_score, 3),
+                "score_delta_vs_global_best": round(evolved_evaluation.total_score - best_evaluation.total_score, 3),
+                "evolution_outperformed_seed": evolved_evaluation.total_score > first_round_evaluation.total_score,
+                "evolution_found_global_best": evolved_candidate.candidate_id == best_candidate.candidate_id,
+            },
         }
         result["report_markdown"] = self.render_markdown_report(result)
         return result
@@ -246,9 +301,18 @@ class FractalPromptFoundry:
         blocks.append("OUTPUT FORMAT: Summary, Plan, Risks, Validation, Next Action.")
         return "\n".join(blocks)
 
-    def evaluate_candidate(self, candidate: Candidate, round_index: int) -> Evaluation:
+    def evaluate_candidate(
+        self,
+        candidate: Candidate,
+        round_index: int,
+        *,
+        prior_prompts: List[str] | None = None,
+        peer_prompts: List[str] | None = None,
+    ) -> Evaluation:
         text = candidate.prompt.lower()
         target_terms = self.target_terms()
+        prior_prompts = prior_prompts or []
+        peer_prompts = peer_prompts or []
 
         present = [term for term in target_terms if term.lower() in text]
         missing = [term for term in target_terms if term.lower() not in text]
@@ -256,14 +320,18 @@ class FractalPromptFoundry:
         coverage = len(present) / max(1, len(target_terms))
         structure = self.structure_score(candidate.prompt)
         actionability = self.actionability_score(candidate.prompt)
-        novelty = self.novelty_score(candidate.prompt)
+        refinement = self.refinement_score(candidate)
+        evolutionary_gain = self.evolutionary_gain_score(candidate)
+        novelty = self.novelty_score(candidate.prompt, prior_prompts=prior_prompts, peer_prompts=peer_prompts)
         anti_vague = self.anti_vagueness_score(candidate.prompt)
 
         total = (
-            coverage * 0.34
-            + structure * 0.22
-            + actionability * 0.22
-            + novelty * 0.12
+            coverage * 0.24
+            + structure * 0.15
+            + actionability * 0.16
+            + refinement * 0.17
+            + evolutionary_gain * 0.10
+            + novelty * 0.08
             + anti_vague * 0.10
         )
 
@@ -274,6 +342,10 @@ class FractalPromptFoundry:
             critique.append("Needs clearer output sections or stronger formatting constraints.")
         if actionability < 0.75:
             critique.append("Needs more explicit validation, next steps, or execution framing.")
+        if refinement < 0.7:
+            critique.append("Needs stronger refinement pressure: verification, failure mode, or sharper execution hooks.")
+        if evolutionary_gain < 0.5:
+            critique.append("Still too close to a static lane; the prompt needs more evolutionary signal or recombination value.")
         if novelty < 0.45:
             critique.append("Too similar to previous prompt DNA; mutation should introduce a new angle.")
         if anti_vague < 0.65:
@@ -293,6 +365,8 @@ class FractalPromptFoundry:
                 "coverage": coverage,
                 "structure": structure,
                 "actionability": actionability,
+                "refinement": refinement,
+                "evolutionary_gain": evolutionary_gain,
                 "novelty": novelty,
                 "anti_vague": anti_vague,
             },
@@ -312,6 +386,7 @@ class FractalPromptFoundry:
                 "State a prioritised next action at the end.",
             ]
         )
+        extra.extend(self.style_pressure(candidate.style, next_round, index))
         prompt = self.compose_prompt(candidate.style, candidate.lane_instruction, extra)
         return Candidate(
             candidate_id=f"r{next_round}-mut-{index}",
@@ -332,10 +407,10 @@ class FractalPromptFoundry:
         next_round: int,
         index: int,
     ) -> Candidate:
-        merged_style = f"{cand_a.style}+{cand_b.style}"
+        merged_style = self.merge_styles(cand_a.style, cand_b.style)
         lane_summary = (
             f"Merge the strengths of {cand_a.style} and {cand_b.style}. "
-            f"Preserve operational clarity, but also inject critique and edge-case pressure."
+            f"Preserve operational clarity, inject critique and edge-case pressure, and make the final output feel decisively executable."
         )
         merged_requirements = []
         merged_requirements.extend([f"Carry over strengths from {cand_a.candidate_id} and {cand_b.candidate_id}."])
@@ -349,6 +424,7 @@ class FractalPromptFoundry:
                 "End with a decisive next move rather than open-ended advice.",
             ]
         )
+        merged_requirements.extend(self.style_pressure(merged_style, next_round, index))
         prompt = self.compose_prompt(merged_style, lane_summary, merged_requirements)
         return Candidate(
             candidate_id=f"r{next_round}-hyb-{index}",
@@ -405,11 +481,71 @@ class FractalPromptFoundry:
         hits = sum(1 for term in action_terms if term in lower)
         return min(1.0, hits / 8)
 
-    def novelty_score(self, prompt: str) -> float:
-        if not self.history:
-            return 1.0
-        similarities = [self.similarity(prompt, prev_candidate.prompt) for prev_candidate, _ in self.history]
-        return max(0.0, 1.0 - max(similarities))
+    def novelty_score(
+        self,
+        prompt: str,
+        *,
+        prior_prompts: List[str] | None = None,
+        peer_prompts: List[str] | None = None,
+    ) -> float:
+        prior_prompts = prior_prompts or []
+        peer_prompts = peer_prompts or []
+        if not prior_prompts and not peer_prompts:
+            return 0.75
+
+        peer_similarity = max((self.similarity(prompt, peer) for peer in peer_prompts), default=0.0)
+        history_similarity = max((self.similarity(prompt, prev) for prev in prior_prompts), default=0.0)
+        blended_similarity = max(history_similarity * 0.75, peer_similarity * 0.45)
+        return max(0.0, min(1.0, 1.0 - blended_similarity))
+
+    def refinement_score(self, candidate: Candidate) -> float:
+        lower = candidate.prompt.lower()
+        refinement_terms = [
+            "verification checklist",
+            "failure-mode",
+            "failure mode",
+            "prioritised next action",
+            "decisive next move",
+            "refinement pressure",
+            "measurable validation",
+            "close these conceptual gaps",
+            "carry over strengths",
+            "explicitly include these concepts",
+        ]
+        hits = sum(1 for term in refinement_terms if term in lower)
+        note_bonus = 1 if any("mutation" in note or "hybrid" in note for note in candidate.notes) else 0
+        return min(1.0, (hits + note_bonus) / 5)
+
+    def evolutionary_gain_score(self, candidate: Candidate) -> float:
+        styles = candidate.style.split("+")
+        unique_styles = list(dict.fromkeys(styles))
+        lineage_depth = max(0, len(candidate.lineage) - 1)
+        style_mix = min(1.0, max(0, len(unique_styles) - 1) / 3)
+        depth_score = min(1.0, lineage_depth / 4)
+        note_score = 1.0 if any("hybrid" in note for note in candidate.notes) else 0.6 if any("mutation" in note for note in candidate.notes) else 0.0
+        return round(min(1.0, style_mix * 0.45 + depth_score * 0.35 + note_score * 0.20), 3)
+
+    def merge_styles(self, *styles: str) -> str:
+        tokens: List[str] = []
+        for style in styles:
+            tokens.extend(part for part in style.split("+") if part)
+        return "+".join(dict.fromkeys(tokens))
+
+    def style_pressure(self, style: str, next_round: int, index: int) -> List[str]:
+        pressures = []
+        style_tokens = set(style.split("+"))
+        if "architect" in style_tokens:
+            pressures.append("Add one compact system map: inputs, decision layer, safety layer, outputs.")
+        if "operator" in style_tokens:
+            pressures.append("Specify one observability block with logs, metrics, and abort conditions.")
+        if "critic" in style_tokens:
+            pressures.append("Name the weakest assumption and how to falsify it before acting.")
+        if "compressor" in style_tokens:
+            pressures.append("Compress every section so each bullet carries one hard instruction.")
+        if "strategist" in style_tokens:
+            pressures.append("Sequence the work into now, next, later with a stated tradeoff.")
+        pressures.append(f"Tag this refinement pass as round {next_round}, variant {index} in the internal planning logic.")
+        return pressures[:4]
 
     @staticmethod
     def anti_vagueness_score(prompt: str) -> float:
@@ -479,6 +615,32 @@ class FractalPromptFoundry:
             "pressure_balance": {k: round(v, 3) for k, v in evaluation.metrics.items()},
         }
 
+    def baseline_diff(
+        self,
+        seed_candidate: Candidate,
+        seed_evaluation: Evaluation,
+        evolved_candidate: Candidate,
+        evolved_evaluation: Evaluation,
+    ) -> Dict[str, object]:
+        seed_lines = {line.strip() for line in seed_candidate.prompt.splitlines() if line.strip()}
+        evolved_lines = {line.strip() for line in evolved_candidate.prompt.splitlines() if line.strip()}
+        added = [line for line in evolved_candidate.prompt.splitlines() if line.strip() and line.strip() not in seed_lines]
+        removed = [line for line in seed_candidate.prompt.splitlines() if line.strip() and line.strip() not in evolved_lines]
+        metric_delta = {
+            key: round(evolved_evaluation.metrics.get(key, 0.0) - seed_evaluation.metrics.get(key, 0.0), 3)
+            for key in evolved_evaluation.metrics
+        }
+        return {
+            "seed_candidate_id": seed_candidate.candidate_id,
+            "evolved_candidate_id": evolved_candidate.candidate_id,
+            "seed_style": seed_candidate.style,
+            "evolved_style": evolved_candidate.style,
+            "added_lines": added[:10],
+            "removed_lines": removed[:10],
+            "metric_delta": metric_delta,
+            "score_delta": round(evolved_evaluation.total_score - seed_evaluation.total_score, 3),
+        }
+
     def uniqueness_thesis(self, candidate: Candidate, evaluation: Evaluation) -> List[str]:
         lane_mix = candidate.style.split("+")
         statements = [
@@ -516,28 +678,65 @@ class FractalPromptFoundry:
         best_candidate = result["best_candidate"]
         best_evaluation = result["best_evaluation"]
         genome_profile = result["genome_profile"]
+        evolved_candidate = result["evolved_candidate"]
+        evolved_evaluation = result["evolved_evaluation"]
+        evolved_genome_profile = result["evolved_genome_profile"]
+        evolution_summary = result["evolution_summary"]
+        baseline_diff = result["baseline_diff"]
         lines = [
             f"# Fractal Prompt Foundry Report — {result['mission']}",
             "",
-            "## Champion",
+            "## Global best candidate",
             f"- Candidate: `{best_candidate['candidate_id']}`",
             f"- Style: `{best_candidate['style']}`",
             f"- Score: `{best_evaluation['total_score']}`",
             f"- Genome ID: `{genome_profile['genome_id']}`",
             "",
+            "## Best evolved candidate",
+            f"- Candidate: `{evolved_candidate['candidate_id']}`",
+            f"- Style: `{evolved_candidate['style']}`",
+            f"- Score: `{evolved_evaluation['total_score']}`",
+            f"- Genome ID: `{evolved_genome_profile['genome_id']}`",
+            "",
+            "## Evolution verdict",
+            f"- Final round: `{evolution_summary['final_round']}`",
+            f"- Seed baseline: `{evolution_summary['seed_best_candidate_id']}` → `{evolution_summary['seed_best_score']}`",
+            f"- Evolved best: `{evolution_summary['evolved_best_candidate_id']}` → `{evolution_summary['evolved_best_score']}`",
+            f"- Delta vs seed: `{evolution_summary['score_delta_vs_seed']}`",
+            f"- Delta vs global best: `{evolution_summary['score_delta_vs_global_best']}`",
+            f"- Evolution outperformed seed: `{evolution_summary['evolution_outperformed_seed']}`",
+            "",
             "## Why this run feels unique",
             *[f"- {item}" for item in result["uniqueness_thesis"]],
             "",
             "## Pressure balance",
-            *[f"- {metric}: `{value}`" for metric, value in best_evaluation["metrics"].items()],
+            *[f"- {metric}: `{value}`" for metric, value in evolved_evaluation["metrics"].items()],
             "",
-            "## Genome profile",
-            f"- Lane mix: `{', '.join(genome_profile['lane_mix'])}`",
-            f"- Lineage depth: `{genome_profile['lineage_depth']}`",
-            f"- Bullet density: `{genome_profile['bullet_density']}`",
-            f"- Imperative density: `{genome_profile['imperative_density']}`",
-            f"- Control density: `{genome_profile['control_density']}`",
-            f"- Domain saturation: `{genome_profile['domain_saturation']}`",
+            "## Evolved genome profile",
+            f"- Lane mix: `{', '.join(evolved_genome_profile['lane_mix'])}`",
+            f"- Lineage depth: `{evolved_genome_profile['lineage_depth']}`",
+            f"- Bullet density: `{evolved_genome_profile['bullet_density']}`",
+            f"- Imperative density: `{evolved_genome_profile['imperative_density']}`",
+            f"- Control density: `{evolved_genome_profile['control_density']}`",
+            f"- Domain saturation: `{evolved_genome_profile['domain_saturation']}`",
+            "",
+            "## Baseline vs evolved diff",
+            f"- Seed baseline: `{baseline_diff['seed_candidate_id']}` ({baseline_diff['seed_style']})",
+            f"- Evolved champion: `{baseline_diff['evolved_candidate_id']}` ({baseline_diff['evolved_style']})",
+            f"- Score delta: `{baseline_diff['score_delta']}`",
+            "",
+            "### Metric deltas",
+            *[f"- {metric}: `{delta:+.3f}`" for metric, delta in baseline_diff["metric_delta"].items()],
+            "",
+            "### Added prompt lines",
+        ]
+        lines.extend([f"- {line}" for line in baseline_diff["added_lines"]] or ["- None"])
+        lines.extend([
+            "",
+            "### Removed prompt lines",
+        ])
+        lines.extend([f"- {line}" for line in baseline_diff["removed_lines"]] or ["- None"])
+        lines.extend([
             "",
             "## Round winners",
             *[
@@ -549,7 +748,7 @@ class FractalPromptFoundry:
             "```mermaid",
             result["lineage_mermaid"],
             "```",
-        ]
+        ])
         return "\n".join(lines)
 
     def save_run_artifacts(self, output_dir: str | Path, result: Dict[str, object]) -> Dict[str, str]:

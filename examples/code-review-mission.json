@@ -1,0 +1,32 @@
+{
+  "name": "code-review-agent",
+  "goal": "Design a prompt for an autonomous code review agent that inspects pull requests, surfaces concrete defects, and recommends the safest next engineering action.",
+  "constraints": [
+    "No automatic merges or code writes.",
+    "Must highlight security, correctness, and maintainability risks.",
+    "Should produce evidence-backed findings and explicit uncertainty when needed.",
+    "Keep the prompt reusable across Python and JavaScript repositories."
+  ],
+  "success_criteria": [
+    "Prompt asks for structured review output.",
+    "Prompt forces severity review before recommendations.",
+    "Prompt includes validation steps and failure modes.",
+    "Prompt is specific enough to reduce generic review comments."
+  ],
+  "deliverables": [
+    "review summary",
+    "risk findings",
+    "validation checklist",
+    "next engineering action"
+  ],
+  "domain_terms": [
+    "pull request",
+    "security",
+    "regression",
+    "test coverage",
+    "correctness",
+    "maintainability",
+    "edge cases",
+    "evidence"
+  ]
+}

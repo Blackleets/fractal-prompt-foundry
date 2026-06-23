@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import benchmark
 from fractal_prompt_foundry import FractalPromptFoundry, Mission, demo_mission, run_mission
 
 
@@ -14,7 +15,11 @@ class FoundryTests(unittest.TestCase):
         result = engine.run(rounds=3)
         self.assertIn("best_candidate", result)
         self.assertIn("best_evaluation", result)
+        self.assertIn("evolved_candidate", result)
+        self.assertIn("evolved_evaluation", result)
         self.assertIn("genome_profile", result)
+        self.assertIn("evolved_genome_profile", result)
+        self.assertIn("evolution_summary", result)
         self.assertIn("lineage_mermaid", result)
         self.assertGreater(result["best_evaluation"]["total_score"], 0.5)
         self.assertTrue(result["leaderboard"])
@@ -22,7 +27,7 @@ class FoundryTests(unittest.TestCase):
     def test_best_prompt_mentions_goal_and_constraints(self):
         engine = FractalPromptFoundry(demo_mission())
         result = engine.run(rounds=2)
-        prompt = result["best_candidate"]["prompt"].lower()
+        prompt = result["evolved_candidate"]["prompt"].lower()
         self.assertIn("primary goal", prompt)
         self.assertIn("constraints", prompt)
         self.assertIn("hyperliquid", prompt)
@@ -58,8 +63,53 @@ class FoundryTests(unittest.TestCase):
                 output_dir=Path(tmpdir),
             )
             self.assertIn("report_markdown", result)
+            self.assertIn("## Best evolved candidate", result["report_markdown"])
+            self.assertIn("baseline_diff", result)
+            self.assertIn("### Added prompt lines", result["report_markdown"])
             self.assertTrue(Path(artifacts["result_json"]).exists())
             self.assertTrue(Path(artifacts["report_markdown"]).exists())
+
+    def test_baseline_diff_captures_metric_delta_and_added_lines(self):
+        engine = FractalPromptFoundry(demo_mission())
+        result = engine.run(rounds=3)
+        diff = result["baseline_diff"]
+        self.assertIn("score_delta", diff)
+        self.assertIn("metric_delta", diff)
+        self.assertTrue(diff["added_lines"])
+        self.assertGreater(diff["score_delta"], 0)
+
+    def test_benchmark_summary_covers_multiple_missions(self):
+        records = [
+            benchmark.mission_record(Path("examples") / "hyperliquid-mission.json"),
+            benchmark.mission_record(Path("examples") / "support-triage-mission.json"),
+            benchmark.mission_record(Path("examples") / "code-review-mission.json"),
+        ]
+        summary = benchmark.benchmark_summary(records)
+        markdown = benchmark.render_markdown(records, summary)
+        self.assertEqual(summary["mission_count"], 3)
+        self.assertGreater(summary["average_delta_vs_seed"], 0)
+        self.assertIn("## Mission results", markdown)
+        self.assertIn("support-triage-agent", markdown)
+
+    def test_evolution_outperforms_seed_on_demo_mission(self):
+        engine = FractalPromptFoundry(demo_mission())
+        result = engine.run(rounds=3)
+        self.assertTrue(result["evolution_summary"]["evolution_outperformed_seed"])
+        self.assertGreater(result["evolved_evaluation"]["total_score"], result["best_evaluation"]["total_score"] - 0.2)
+
+    def test_seed_scores_are_order_independent_within_round_zero(self):
+        mission = demo_mission()
+        engine = FractalPromptFoundry(mission)
+        population = engine.seed_population()
+        forward_scores = {
+            candidate.candidate_id: engine.evaluate_candidate(candidate, 0, prior_prompts=[]).total_score
+            for candidate in population
+        }
+        reverse_scores = {
+            candidate.candidate_id: engine.evaluate_candidate(candidate, 0, prior_prompts=[]).total_score
+            for candidate in reversed(population)
+        }
+        self.assertEqual(forward_scores, reverse_scores)
 
     def test_mission_rejects_string_constraints(self):
         with self.assertRaises(ValueError):

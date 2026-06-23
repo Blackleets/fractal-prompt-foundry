@@ -1,0 +1,262 @@
+{
+  "summary": {
+    "mission_count": 3,
+    "average_winner_score": 0.923,
+    "average_delta_vs_seed": 0.221,
+    "beat_seed_rate": 1.0,
+    "lane_frequency": {
+      "critic": 3,
+      "architect": 3,
+      "operator": 3
+    },
+    "primary_lane_frequency": {
+      "critic": 2,
+      "operator": 1
+    }
+  },
+  "missions": [
+    {
+      "mission": "hyperliquid-agent-loop",
+      "goal": "Design a prompt for an autonomous trading research agent that studies Hyperliquid market structure and proposes low-risk experiments.",
+      "winner_id": "r3-mut-5",
+      "winner_style": "critic+architect+operator",
+      "winner_score": 0.932,
+      "seed_score": 0.727,
+      "delta_vs_seed": 0.204,
+      "outperformed_seed": true,
+      "top_lane_tokens": [
+        "critic",
+        "architect",
+        "operator"
+      ],
+      "baseline_diff": {
+        "seed_candidate_id": "seed-3",
+        "evolved_candidate_id": "r3-mut-5",
+        "seed_style": "critic",
+        "evolved_style": "critic+architect+operator",
+        "added_lines": [
+          "ROLE LANE: CRITIC+ARCHITECT+OPERATOR",
+          "Merge the strengths of critic+architect and operator+architect. Preserve operational clarity, inject critique and edge-case pressure, and make the final output feel decisively executable.",
+          "REFINEMENT PRESSURE:",
+          "- Force one measurable validation step.",
+          "- Add a failure-mode paragraph.",
+          "- State a prioritised next action at the end.",
+          "- Add one compact system map: inputs, decision layer, safety layer, outputs.",
+          "- Specify one observability block with logs, metrics, and abort conditions.",
+          "- Name the weakest assumption and how to falsify it before acting.",
+          "- Tag this refinement pass as round 3, variant 5 in the internal planning logic."
+        ],
+        "removed_lines": [
+          "ROLE LANE: CRITIC",
+          "Think in risks, edge cases, weak assumptions, and adversarial checks."
+        ],
+        "metric_delta": {
+          "coverage": 0.0,
+          "structure": 0.0,
+          "actionability": 0.0,
+          "refinement": 0.8,
+          "evolutionary_gain": 0.85,
+          "novelty": -0.211,
+          "anti_vague": 0.0
+        },
+        "score_delta": 0.204
+      },
+      "artifacts": {
+        "result_json": "artifacts\\benchmarks\\hyperliquid-agent-loop\\result.json",
+        "report_markdown": "artifacts\\benchmarks\\hyperliquid-agent-loop\\report.md"
+      },
+      "round_winners": [
+        {
+          "round": 0,
+          "winner_id": "seed-3",
+          "winner_style": "critic",
+          "winner_score": 0.727,
+          "population_size": 5
+        },
+        {
+          "round": 1,
+          "winner_id": "r1-hyb-2",
+          "winner_style": "critic+architect",
+          "winner_score": 0.911,
+          "population_size": 5
+        },
+        {
+          "round": 2,
+          "winner_id": "r2-hyb-3",
+          "winner_style": "critic+operator+architect",
+          "winner_score": 0.929,
+          "population_size": 5
+        },
+        {
+          "round": 3,
+          "winner_id": "r3-mut-5",
+          "winner_style": "critic+architect+operator",
+          "winner_score": 0.932,
+          "population_size": 5
+        }
+      ]
+    },
+    {
+      "mission": "support-triage-agent",
+      "goal": "Design a prompt for an autonomous support triage agent that classifies inbound tickets, identifies urgency, and proposes safe next actions for a human support team.",
+      "winner_id": "r3-mut-5",
+      "winner_style": "operator+critic+architect",
+      "winner_score": 0.906,
+      "seed_score": 0.677,
+      "delta_vs_seed": 0.229,
+      "outperformed_seed": true,
+      "top_lane_tokens": [
+        "operator",
+        "critic",
+        "architect"
+      ],
+      "baseline_diff": {
+        "seed_candidate_id": "seed-2",
+        "evolved_candidate_id": "r3-mut-5",
+        "seed_style": "operator",
+        "evolved_style": "operator+critic+architect",
+        "added_lines": [
+          "ROLE LANE: OPERATOR+CRITIC+ARCHITECT",
+          "Merge the strengths of operator+critic and operator+architect. Preserve operational clarity, inject critique and edge-case pressure, and make the final output feel decisively executable.",
+          "REFINEMENT PRESSURE:",
+          "- Force one measurable validation step.",
+          "- Add a failure-mode paragraph.",
+          "- State a prioritised next action at the end.",
+          "- Add one compact system map: inputs, decision layer, safety layer, outputs.",
+          "- Specify one observability block with logs, metrics, and abort conditions.",
+          "- Name the weakest assumption and how to falsify it before acting.",
+          "- Tag this refinement pass as round 3, variant 5 in the internal planning logic."
+        ],
+        "removed_lines": [
+          "ROLE LANE: OPERATOR",
+          "Think in execution steps, observability, and safe operations."
+        ],
+        "metric_delta": {
+          "coverage": 0.0,
+          "structure": 0.0,
+          "actionability": 0.125,
+          "refinement": 0.8,
+          "evolutionary_gain": 0.85,
+          "novelty": -0.209,
+          "anti_vague": 0.05
+        },
+        "score_delta": 0.229
+      },
+      "artifacts": {
+        "result_json": "artifacts\\benchmarks\\support-triage-agent\\result.json",
+        "report_markdown": "artifacts\\benchmarks\\support-triage-agent\\report.md"
+      },
+      "round_winners": [
+        {
+          "round": 0,
+          "winner_id": "seed-2",
+          "winner_style": "operator",
+          "winner_score": 0.677,
+          "population_size": 5
+        },
+        {
+          "round": 1,
+          "winner_id": "r1-hyb-3",
+          "winner_style": "critic+architect",
+          "winner_score": 0.886,
+          "population_size": 5
+        },
+        {
+          "round": 2,
+          "winner_id": "r2-hyb-1",
+          "winner_style": "critic+architect+operator",
+          "winner_score": 0.905,
+          "population_size": 5
+        },
+        {
+          "round": 3,
+          "winner_id": "r3-mut-5",
+          "winner_style": "operator+critic+architect",
+          "winner_score": 0.906,
+          "population_size": 5
+        }
+      ]
+    },
+    {
+      "mission": "code-review-agent",
+      "goal": "Design a prompt for an autonomous code review agent that inspects pull requests, surfaces concrete defects, and recommends the safest next engineering action.",
+      "winner_id": "r3-mut-5",
+      "winner_style": "critic+architect+operator",
+      "winner_score": 0.931,
+      "seed_score": 0.702,
+      "delta_vs_seed": 0.229,
+      "outperformed_seed": true,
+      "top_lane_tokens": [
+        "critic",
+        "architect",
+        "operator"
+      ],
+      "baseline_diff": {
+        "seed_candidate_id": "seed-3",
+        "evolved_candidate_id": "r3-mut-5",
+        "seed_style": "critic",
+        "evolved_style": "critic+architect+operator",
+        "added_lines": [
+          "ROLE LANE: CRITIC+ARCHITECT+OPERATOR",
+          "Merge the strengths of critic+architect and operator+architect. Preserve operational clarity, inject critique and edge-case pressure, and make the final output feel decisively executable.",
+          "REFINEMENT PRESSURE:",
+          "- Force one measurable validation step.",
+          "- Add a failure-mode paragraph.",
+          "- State a prioritised next action at the end.",
+          "- Add one compact system map: inputs, decision layer, safety layer, outputs.",
+          "- Specify one observability block with logs, metrics, and abort conditions.",
+          "- Name the weakest assumption and how to falsify it before acting.",
+          "- Tag this refinement pass as round 3, variant 5 in the internal planning logic."
+        ],
+        "removed_lines": [
+          "ROLE LANE: CRITIC",
+          "Think in risks, edge cases, weak assumptions, and adversarial checks."
+        ],
+        "metric_delta": {
+          "coverage": 0.0,
+          "structure": 0.0,
+          "actionability": 0.125,
+          "refinement": 0.8,
+          "evolutionary_gain": 0.85,
+          "novelty": -0.213,
+          "anti_vague": 0.05
+        },
+        "score_delta": 0.229
+      },
+      "artifacts": {
+        "result_json": "artifacts\\benchmarks\\code-review-agent\\result.json",
+        "report_markdown": "artifacts\\benchmarks\\code-review-agent\\report.md"
+      },
+      "round_winners": [
+        {
+          "round": 0,
+          "winner_id": "seed-3",
+          "winner_style": "critic",
+          "winner_score": 0.702,
+          "population_size": 5
+        },
+        {
+          "round": 1,
+          "winner_id": "r1-hyb-2",
+          "winner_style": "critic+architect",
+          "winner_score": 0.906,
+          "population_size": 5
+        },
+        {
+          "round": 2,
+          "winner_id": "r2-hyb-3",
+          "winner_style": "critic+operator+architect",
+          "winner_score": 0.924,
+          "population_size": 5
+        },
+        {
+          "round": 3,
+          "winner_id": "r3-mut-5",
+          "winner_style": "critic+architect+operator",
+          "winner_score": 0.931,
+          "population_size": 5
+        }
+      ]
+    }
+  ]
+}

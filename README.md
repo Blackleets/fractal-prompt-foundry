@@ -1,31 +1,31 @@
 <div align="center">
-  <img src="assets/hero.svg" alt="Fractal Prompt Foundry hero banner" width="100%" />
+  <h1>Fractal Prompt Foundry</h1>
+  <p><strong>Breed better instructions before they ever hit your agents.</strong></p>
+  <p><em>An offline prompt-evolution engine for multi-agent systems, research loops, and benchmarkable prompt DNA.</em></p>
 
-  # Fractal Prompt Foundry
-
-  **Breed better instructions before they ever hit your agents.**
-
-  *A prompt-evolution engine that seeds prompt lanes, scores pressure, hybridizes winners, mutates weak spots, and keeps the strongest prompt DNA.*
+  <p>
+    <img src="https://img.shields.io/badge/python-3.11%2B-2563EB?style=flat-square" alt="Python 3.11+" />
+    <img src="https://img.shields.io/badge/status-local--first-F59E0B?style=flat-square" alt="Local-first" />
+    <img src="https://img.shields.io/badge/license-MIT-10B981?style=flat-square" alt="MIT license" />
+    <img src="https://img.shields.io/badge/benchmarks-multi--mission-7C3AED?style=flat-square" alt="Multi-mission benchmarks" />
+    <img src="https://img.shields.io/badge/diffs-baseline%20vs%20evolved-0891B2?style=flat-square" alt="Baseline vs evolved diffs" />
+  </p>
 
   <p>
     <a href="#30-second-try">
       <img src="https://img.shields.io/badge/Try-30_Seconds-8B5CF6?style=for-the-badge&logo=lightning&logoColor=white" alt="Try in 30 seconds" />
     </a>
-    <a href="#quickstart">
-      <img src="https://img.shields.io/badge/Get-Started-0F172A?style=for-the-badge&logo=python&logoColor=white" alt="Get Started" />
-    </a>
     <a href="#why-people-would-actually-use-this">
-      <img src="https://img.shields.io/badge/Why-People_Care-06B6D4?style=for-the-badge&logo=sparkles&logoColor=white" alt="Why people care" />
+      <img src="https://img.shields.io/badge/See-Why_It_Matters-0F172A?style=for-the-badge&logo=github&logoColor=white" alt="See why it matters" />
+    </a>
+    <a href="#benchmark-suite">
+      <img src="https://img.shields.io/badge/View-Benchmark_Suite-06B6D4?style=for-the-badge&logo=graph&logoColor=white" alt="View benchmark suite" />
     </a>
   </p>
 
-  <p>
-    <img src="https://img.shields.io/badge/python-3.11%2B-2563EB?style=flat-square" alt="Python 3.11+" />
-    <img src="https://img.shields.io/badge/status-prototype-F59E0B?style=flat-square" alt="Status prototype" />
-    <img src="https://img.shields.io/badge/license-MIT-10B981?style=flat-square" alt="MIT license" />
-    <img src="https://img.shields.io/badge/agents-multi--agent-7C3AED?style=flat-square" alt="Multi-agent" />
-    <img src="https://img.shields.io/badge/focus-prompt%20evolution-0891B2?style=flat-square" alt="Prompt evolution" />
-  </p>
+  <img src="assets/hero.svg" alt="Fractal Prompt Foundry hero banner" width="100%" />
+
+  <p><sub>Seed prompts. Pressure score them. Hybridize winners. Mutate weak spots. Keep only the strongest prompt DNA.</sub></p>
 </div>
 
 ---
@@ -118,6 +118,8 @@ python -m fractal_prompt_foundry \
   --rounds 4 \
   --output-dir artifacts/custom-run
 ```
+
+## Benchmark suite
 
 ### Option D — run the benchmark suite
 

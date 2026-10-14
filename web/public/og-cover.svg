@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#07060c"/>
+  <defs>
+    <radialGradient id="a" cx="20%" cy="10%" r="60%">
+      <stop offset="0" stop-color="#6C5CE7" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#6C5CE7" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="b" cx="85%" cy="20%" r="55%">
+      <stop offset="0" stop-color="#00D2FF" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#00D2FF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="t" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F1F0FF"/>
+      <stop offset="0.45" stop-color="#A78BFA"/>
+      <stop offset="1" stop-color="#00D2FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#a)"/>
+  <rect width="1200" height="630" fill="url(#b)"/>
+  <text x="80" y="150" font-family="monospace" font-size="22" letter-spacing="6" fill="#A78BFA">FRACTAL PROMPT FOUNDRY</text>
+  <text x="80" y="260" font-family="sans-serif" font-weight="800" font-size="84" fill="url(#t)">Evoluciona prompts,</text>
+  <text x="80" y="350" font-family="sans-serif" font-weight="800" font-size="84" fill="#F1F0FF">no los improvises.</text>
+  <text x="80" y="410" font-family="monospace" font-size="24" fill="#8B89A3">seed → pressure → hybridize → champion DNA</text>
+  <rect x="80" y="460" width="220" height="56" rx="14" fill="#6C5CE7"/>
+  <text x="110" y="496" font-family="monospace" font-size="24" fill="#fff">TRY IN 30 SEC</text>
+  <rect x="320" y="460" width="220" height="56" rx="14" fill="none" stroke="#232040" stroke-width="2"/>
+  <text x="360" y="496" font-family="monospace" font-size="24" fill="#C4B5FD">LOCAL-FIRST</text>
+</svg>

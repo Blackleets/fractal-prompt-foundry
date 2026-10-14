@@ -1,0 +1,17 @@
+{
+  "name": "Fractal Prompt Foundry",
+  "short_name": "Prompt Foundry",
+  "description": "Evolve any rough idea into a winning prompt — round by round.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08090a",
+  "theme_color": "#6c5ce7",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
